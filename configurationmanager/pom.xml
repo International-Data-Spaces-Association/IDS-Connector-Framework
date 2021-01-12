@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>parent</artifactId>
+        <groupId>de.fraunhofer.isst.ids.framework</groupId>
+        <version>${revision}</version>
+    </parent>
+
+    <url>https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework</url>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>configurationmanager</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <springfox-swagger.version>2.9.2</springfox-swagger.version>
+        <spring-web.version>5.2.1.RELEASE</spring-web.version>
+
+        <sonar.projectKey>de.fraunhofer.isst.ids.framework.configurationmanager</sonar.projectKey>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>uml-gen</id>
+            <dependencies>
+                <!-- https://mvnrepository.com/artifact/de.elnarion.maven/plantuml-generator-maven-plugin -->
+                <dependency>
+                    <groupId>de.elnarion.maven</groupId>
+                    <artifactId>plantuml-generator-maven-plugin</artifactId>
+                    <version>1.0.0</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>plantuml-generator-maven-plugin</artifactId>
+                        <groupId>de.elnarion.maven</groupId>
+                        <version>1.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-entity-diagram</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <phase>generate-test-sources</phase>
+                                <configuration>
+                                    <outputFilename>entities.puml</outputFilename>
+                                    <scanPackages>
+                                        <scanPackage>
+                                            de.fraunhofer.isst.ids.framework.configurationmanager
+                                        </scanPackage>
+                                    </scanPackages>
+                                    <hideMethods>true</hideMethods>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-web.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Base module -->
+
+        <dependency>
+            <groupId>de.fraunhofer.isst.ids.framework</groupId>
+            <artifactId>base</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Swagger -->
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

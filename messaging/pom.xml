@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>de.fraunhofer.isst.ids.framework</groupId>
+        <artifactId>parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>messaging</artifactId>
+    <packaging>jar</packaging>
+    <url>https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework</url>
+
+    <properties>
+        <springfox-swagger.version>2.9.2</springfox-swagger.version>
+        <sonar.projectKey>de.fraunhofer.isst.ids.framework.messaging.core</sonar.projectKey>
+        <spring-boot-starter-web.version>2.2.0.RELEASE</spring-boot-starter-web.version>
+        <spring-tx.version>5.2.0.RELEASE</spring-tx.version>
+        <spring-web.version>5.2.1.RELEASE</spring-web.version>
+        <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+        <javax.ws.rs-api.version>2.1.1</javax.ws.rs-api.version>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>uml-gen</id>
+            <dependencies>
+                <!-- https://mvnrepository.com/artifact/de.elnarion.maven/plantuml-generator-maven-plugin -->
+                <dependency>
+                    <groupId>de.elnarion.maven</groupId>
+                    <artifactId>plantuml-generator-maven-plugin</artifactId>
+                    <version>1.0.0</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>plantuml-generator-maven-plugin</artifactId>
+                        <groupId>de.elnarion.maven</groupId>
+                        <version>1.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>generate-entity-diagram</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <phase>generate-test-sources</phase>
+                                <configuration>
+                                    <outputFilename>entities.puml</outputFilename>
+                                    <scanPackages>
+                                        <scanPackage>
+                                            de.fraunhofer.isst.ids.framework.messaging.core
+                                        </scanPackage>
+                                    </scanPackages>
+                                    <hideMethods>true</hideMethods>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <!--        <dependency>-->
+        <!--            <groupId>de.fraunhofer.isst.ids</groupId>-->
+        <!--            <artifactId>yaim</artifactId>-->
+        <!--            <version>${yaim.version}</version>-->
+        <!--            <classifier>11</classifier>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>de.fraunhofer.isst.ids.infomodel</groupId>-->
+        <!--                    <artifactId>core</artifactId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>de.fraunhofer.isst.ids.infomodel</groupId>-->
+        <!--            <artifactId>core</artifactId>-->
+        <!--            <version>${infomodel.core.version}</version>-->
+        <!--            <classifier>11</classifier>-->
+        <!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>-->
+<!--            <artifactId>java</artifactId>-->
+<!--            <version>2.1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
+
+        <!-- Compile time production dependencies -->
+
+        <!-- Swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.2.0.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.2.1.RELEASE</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring-tx.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring-web.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${javax.ws.rs-api.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.2.0.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.databind.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.fraunhofer.iais.eis.ids</groupId>
+            <artifactId>infomodel-serializer</artifactId>
+            <version>${de.fraunhofer.iais.eis.ids.infomodel.serializer.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
+            <artifactId>validation-serialization-provider</artifactId>
+            <version>${de.fraunhofer.iais.eis.ids.infomodel.validator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
+            <artifactId>java</artifactId>
+            <version>${de.fraunhofer.iais.eis.ids.infomodel.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>de.fraunhofer.isst.ids.framework</groupId>
+            <artifactId>base</artifactId>
+            <version>${revision}</version>
+            <scope>compile</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
