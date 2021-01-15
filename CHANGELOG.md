@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
+
 ## [Unreleased]
 ### Added
 ### Changed
@@ -12,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security 
 
+## [4.0.1] - 2021-01-15
+### Fixed
+- ErrorResponse can now be created with every RejectionMessage, not just RejectionMessageImpl
+### Changed
+- Add Project license to every maven module pom
 ## [4.0.0] - 2021-01-12
 ### Changed
 - IDSController accepts ResponseMessages as incoming IDS Messages
@@ -85,14 +92,5 @@ change their configuration to an Infomodel ConfigurationModel object when updati
 ## [<2.0.12]
 _Versions before 2.0.12 are not available in the gitlab repository._
 
-[Unreleased]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v4.0.0...dev
-[4.0.0]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v3.2.3...v4.0.0
-[3.2.3]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v3.2.2...v3.2.3
-[3.2.2]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v3.2.1...v3.2.2
-[3.2.1]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v3.2.0...v3.2.1
-[3.2.0]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v3.1.0...v3.2.0
-[3.1.0]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v3.0.1...v3.1.0
-[3.0.1]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v3.0.0...v3.0.1
-[3.0.0]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v2.0.13...v3.0.0
-[2.0.13]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/compare/v2.0.12...v2.0.13
-[2.0.12]: https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/tree/v2.0.12
+[Unreleased]: https://github.com/FraunhoferISST/IDS-Connector-Framework/compare/master...4.0.1
+[4.0.1]: https://github.com/FraunhoferISST/IDS-Connector-Framework/compare/4.0.1...4.0.0
