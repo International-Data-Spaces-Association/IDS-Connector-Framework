@@ -14,6 +14,10 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Fixed
 ### Security 
 
+## [4.0.2-SNAPSHOT] - 2021-01-19
+### Changed
+- Minor adjustments to the code in the context of CleanCoding
+
 ## [4.0.1] - 2021-01-15
 ### Fixed
 - ErrorResponse can now be created with every RejectionMessage, not just RejectionMessageImpl
