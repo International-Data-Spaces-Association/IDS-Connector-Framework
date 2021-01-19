@@ -20,7 +20,7 @@ public class BrokerIDSMessageUtils {
     private static final Serializer SERIALIZER = new Serializer();
 
     /**
-     * Create a ResourceUnavaliableMessage used for unregistering the given resource at a broker
+     * Create a ResourceUnavailableMessage used for unregistering the given resource at a broker
      *
      * @param securityToken the DAT Token used for this request
      * @param INFO_MODEL_VERSION the Infomodel Version of the connector
@@ -29,7 +29,7 @@ public class BrokerIDSMessageUtils {
      * @return the {@link ResourceUnavailableMessage} as JSONLD
      * @throws IOException when the message cannot be serialized properly
      */
-    public static String buildResourceUnvailableMessage(DynamicAttributeToken securityToken, String INFO_MODEL_VERSION, URI connectorID, Resource resource) throws IOException {
+    public static String buildResourceUnavailableMessage(DynamicAttributeToken securityToken, String INFO_MODEL_VERSION, URI connectorID, Resource resource) throws IOException {
         var msg = new ResourceUnavailableMessageBuilder()
                 ._affectedResource_(resource.getId())
                 ._securityToken_(securityToken)
