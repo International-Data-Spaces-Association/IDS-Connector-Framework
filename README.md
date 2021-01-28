@@ -68,7 +68,7 @@ the `pom.xml` file.
 
 ## Usage of the IDS Framework
 
-For a detailed description of the usage of the IDS Framework and its modules see the corresponding Wiki pages (https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework/-/wikis/home).
+For a detailed description of the usage of the IDS Framework and its modules see the Wiki pages of this project.
 
 ### MVP Framework Demo
 

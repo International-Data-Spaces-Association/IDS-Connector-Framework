@@ -1,5 +1,6 @@
 package de.fraunhofer.isst.ids.framework.messaging.handling;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +45,7 @@ public class IDSEndpointService {
      */
     public void addMapping(String url){
         LOGGER.debug(String.format("Adding a mapping for url %s", url));
-        RequestMappingInfo requestMappingInfo = RequestMappingInfo
-                .paths(url)
-                .methods(RequestMethod.POST)
-                .consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .produces(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .build();
+        RequestMappingInfo requestMappingInfo = getRequestMappingInfo(url);
         try {
             requestMappingHandlerMapping.registerMapping(requestMappingInfo, idsController, IDSController.class.getDeclaredMethod("handleIDSMessage", HttpServletRequest.class));
         } catch (NoSuchMethodException e) {
@@ -65,12 +61,17 @@ public class IDSEndpointService {
      */
     public void removeMapping(String url){
         LOGGER.debug(String.format("Remove mapping for url %s", url));
-        RequestMappingInfo requestMappingInfo = RequestMappingInfo
+        RequestMappingInfo requestMappingInfo = getRequestMappingInfo(url);
+        requestMappingHandlerMapping.unregisterMapping(requestMappingInfo);
+    }
+
+    @NotNull
+    private RequestMappingInfo getRequestMappingInfo(String url) {
+        return RequestMappingInfo
                 .paths(url)
                 .methods(RequestMethod.POST)
                 .consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .produces(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .build();
-        requestMappingHandlerMapping.unregisterMapping(requestMappingInfo);
     }
 }

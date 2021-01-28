@@ -12,7 +12,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>messaging</artifactId>
     <packaging>jar</packaging>
-    <url>https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework</url>
+    <url>https://github.com/FraunhoferISST/IDS-Connector-Framework</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <springfox-swagger.version>2.9.2</springfox-swagger.version>

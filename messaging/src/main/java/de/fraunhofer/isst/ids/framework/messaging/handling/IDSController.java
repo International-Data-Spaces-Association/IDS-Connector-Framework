@@ -137,8 +137,8 @@ public class IDSController {
                     ._issued_(IDSUtils.getGregorianNow())
                     .build();
             var multiMap = new LinkedMultiValueMap<String, Object>();
-            multiMap.put("header", List.of(serializer.serialize(rejectionMessage)));
-            multiMap.put("payload", List.of(errorMessage));
+            multiMap.put(HEADER_MULTIPART_NAME, List.of(serializer.serialize(rejectionMessage)));
+            multiMap.put(PAYLOAD_MULTIPART_NAME, List.of(errorMessage));
             return multiMap;
         } catch (IOException e) {
             log.info(e.getMessage(), e);

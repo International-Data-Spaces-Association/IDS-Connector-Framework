@@ -52,7 +52,7 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
         var securityToken = tokenProvider.getDAT();
         LOGGER.debug("Building message header");
         var connectorID = container.getConnector().getId();
-        var header = BrokerIDSMessageUtils.buildResourceUnvailableMessage(securityToken, INFO_MODEL_VERSION, connectorID, resource);
+        var header = BrokerIDSMessageUtils.buildResourceUnavailableMessage(securityToken, INFO_MODEL_VERSION, connectorID, resource);
         var payload = ser.serialize(resource);
         var body = BrokerIDSMessageUtils.buildRequestBody(header, payload);
         LOGGER.debug(String.format("Sending message to %s", brokerURI));

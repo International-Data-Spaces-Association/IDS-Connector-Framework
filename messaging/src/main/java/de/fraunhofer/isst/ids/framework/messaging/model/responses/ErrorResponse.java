@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 public class ErrorResponse implements MessageResponse {
 
-    private final RejectionMessageImpl rejectionMessage;
+    private final RejectionMessage rejectionMessage;
     private final String errorMessage;
 
     /**
@@ -27,7 +27,7 @@ public class ErrorResponse implements MessageResponse {
      * @param rejectionMessage a RejectionMessage
      * @param errorMessage a detailed Error description
      */
-    public ErrorResponse(RejectionMessageImpl rejectionMessage, String errorMessage){
+    public ErrorResponse(RejectionMessage rejectionMessage, String errorMessage){
         this.rejectionMessage = rejectionMessage;
         this.errorMessage = errorMessage;
     }
@@ -39,7 +39,7 @@ public class ErrorResponse implements MessageResponse {
      * @param errorReason a detailed Error description
      * @return an instance of ErrorResponse with the given parameters
      */
-    public static ErrorResponse create(final RejectionMessageImpl rejectionMessage, final String errorReason) {
+    public static ErrorResponse create(final RejectionMessage rejectionMessage, final String errorReason) {
         return new ErrorResponse(rejectionMessage, errorReason);
     }
 
@@ -62,7 +62,7 @@ public class ErrorResponse implements MessageResponse {
                 ._rejectionReason_(rejectionReason)
                 ._issued_(IDSUtils.getGregorianNow())
                 .build();
-        return new ErrorResponse((RejectionMessageImpl) rejectionMessage, errorMessage);
+        return new ErrorResponse(rejectionMessage, errorMessage);
     }
 
     /**{@inheritDoc}*/

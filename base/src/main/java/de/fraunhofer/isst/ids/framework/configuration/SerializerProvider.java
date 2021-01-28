@@ -18,8 +18,7 @@ public class SerializerProvider {
      */
     @Bean
     public Serializer getSerializer() {
-        Serializer ser = new Serializer();
-        return ser;
+        return new Serializer();
     }
 
 }

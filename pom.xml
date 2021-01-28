@@ -7,7 +7,7 @@
     <groupId>de.fraunhofer.isst.ids.framework</groupId>
     <artifactId>parent</artifactId>
     <version>${revision}</version>
-    <url>https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework</url>
+    <url>https://github.com/FraunhoferISST/IDS-Connector-Framework</url>
     <packaging>pom</packaging>
     <organization>
         <name>Fraunhofer Institute for Software and Systems Engineering</name>
@@ -21,8 +21,8 @@
         </license>
     </licenses>
     <issueManagement>
-        <system>Jira</system>
-        <url>https://www.ids.isst.fraunhofer.de/jira/projects/FRAME</url>
+        <system>Github</system>
+        <url>https://github.com/FraunhoferISST/IDS-Connector-Framework/issues</url>
     </issueManagement>
 
     <modules>
@@ -32,7 +32,7 @@
     </modules>
 
     <properties>
-        <revision>4.0.0</revision>
+        <revision>4.0.2</revision>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

@@ -52,7 +52,7 @@ public class ConfigProducer {
                 config = IOUtils.toString(fis);
                 fis.close();
             }else {
-                String.format("Loading config from classpath: %s", properties.getPath());
+                LOGGER.info(String.format("Loading config from classpath: %s", properties.getPath()));
                 InputStream configurationStream = new ClassPathResource(properties.getPath()).getInputStream();
                 config = IOUtils.toString(configurationStream);
                 configurationStream.close();
