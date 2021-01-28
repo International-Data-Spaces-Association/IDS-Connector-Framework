@@ -14,7 +14,9 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Fixed
 ### Security 
 
-## [4.0.2-SNAPSHOT] - 2021-01-19
+## [4.0.2] - 2021-01-28
+### Fixed
+- KeyStoreManager: loading  certificates from subpaths in classpath
 ### Changed
 - Minor adjustments to the code in the context of CleanCoding
 
