@@ -6,11 +6,13 @@ import de.fraunhofer.isst.ids.framework.util.IDSUtils;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -109,7 +111,6 @@ public class KeyStoreManager {
      */
     private KeyStore loadKeyStore(char[] pw, URI location) throws CertificateException, NoSuchAlgorithmException, IOException {
         LOGGER.info(String.format("Searching for keystore file %s", location.toString()));
-        var classLoader = getClass().getClassLoader();
         KeyStore store;
         try{
             store = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -125,26 +126,26 @@ public class KeyStoreManager {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
         LOGGER.info("Path: " + pathString);
-        InputStream is = classLoader.getResourceAsStream(pathString);
-        if(is == null){
+
+        var keyStoreOnClassPath = new ClassPathResource(pathString).exists();
+
+        if(!keyStoreOnClassPath){
             LOGGER.warn("Could not load keystore from classpath, trying to find it at system scope!");
             try {
                 LOGGER.info(path.toString());
                 var fis = new FileInputStream(path.toString());
                 store.load(fis, pw);
-                if (fis != null) {
-                    fis.close();
-                }
+                fis.close();
             } catch (IOException e) {
                 LOGGER.warn("Could not find keystore at system scope, aborting!");
                 throw e;
             }
         }else{
+            LOGGER.info("Loading KeyStore from ClassPath...");
+            InputStream is = new ClassPathResource(pathString).getInputStream();
             try {
                 store.load(is, pw);
-                if (is != null) {
-                    is.close();
-                }
+                is.close();
             } catch (IOException e) {
                 LOGGER.warn("Could not find keystore, aborting!");
                 throw e;
