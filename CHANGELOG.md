@@ -14,6 +14,10 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Fixed
 ### Security 
 
+## [4.0.3] - 2021-01-29
+### Fixed
+- ClientProvider: override read timeout if given
+
 ## [4.0.2] - 2021-01-28
 ### Fixed
 - KeyStoreManager: loading  certificates from subpaths in classpath
@@ -98,5 +102,7 @@ change their configuration to an Infomodel ConfigurationModel object when updati
 ## [<2.0.12]
 _Versions before 2.0.12 are not available in the gitlab repository._
 
-[Unreleased]: https://github.com/FraunhoferISST/IDS-Connector-Framework/compare/master...4.0.1
+[Unreleased]: https://github.com/FraunhoferISST/IDS-Connector-Framework/compare/master...4.0.3
+[4.0.3]: https://github.com/FraunhoferISST/IDS-Connector-Framework/compare/4.0.3...4.0.2
+[4.0.2]: https://github.com/FraunhoferISST/IDS-Connector-Framework/compare/4.0.2...4.0.1
 [4.0.1]: https://github.com/FraunhoferISST/IDS-Connector-Framework/compare/4.0.1...4.0.0
