@@ -14,6 +14,10 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Fixed
 ### Security 
 
+## [4.0.4] - 2021-02-04
+### Changed
+- Sending an automatic ErrorResponse/RejectionsMessage can now include the message-ID of the rejected message, if it was available
+
 ## [4.0.3] - 2021-01-29
 ### Fixed
 - ClientProvider: override read timeout if given
