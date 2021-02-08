@@ -19,6 +19,7 @@
  */
 package de.fraunhofer.isst.ids.framework.daps;
 
+import de.fraunhofer.iais.eis.ConnectorDeployMode;
 import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.util.ClientProvider;
 import io.jsonwebtoken.JwtBuilder;
@@ -65,7 +66,8 @@ public class TokenManagerService {
      * @param provider providing underlying OkHttpClient
      * @return signed DAPS JWT token for the Connector
      */
-    public static String acquireToken(ConfigurationContainer container, ClientProvider provider, String dapsUrl) {
+    public static String acquireToken(ConfigurationContainer container, ClientProvider provider, String dapsUrl)
+            throws DapsConnectionException, DapsEmptyResponseException, ConnectorMissingCertExtensionException {
 
             var keyStoreManager = container.getKeyManager();
 
@@ -87,7 +89,7 @@ public class TokenManagerService {
                 String aki_oid = Extension.authorityKeyIdentifier.getId();
                 byte[] rawAuthorityKeyIdentifier = cert.getExtensionValue(aki_oid);
                 if(rawAuthorityKeyIdentifier == null){
-                    throw new MissingCertExtensionException("AKI of the Connector Certificate is null!");
+                    throw new ConnectorMissingCertExtensionException("AKI of the Connector Certificate is null!");
                 }
                 ASN1OctetString akiOc = ASN1OctetString.getInstance(rawAuthorityKeyIdentifier);
                 AuthorityKeyIdentifier aki = AuthorityKeyIdentifier.getInstance(akiOc.getOctets());
@@ -98,7 +100,7 @@ public class TokenManagerService {
                 String ski_oid = Extension.subjectKeyIdentifier.getId();
                 byte[] rawSubjectKeyIdentifier = cert.getExtensionValue(ski_oid);
                 if(rawSubjectKeyIdentifier == null){
-                    throw new MissingCertExtensionException("SKI of the Connector Certificate is null!");
+                    throw new ConnectorMissingCertExtensionException("SKI of the Connector Certificate is null!");
                 }
                 ASN1OctetString ski0c = ASN1OctetString.getInstance(rawSubjectKeyIdentifier);
                 SubjectKeyIdentifier ski = SubjectKeyIdentifier.getInstance(ski0c.getOctets());
@@ -154,7 +156,7 @@ public class TokenManagerService {
                 }
                 var responseBody = jwtResponse.body();
                 if (responseBody == null) {
-                    throw new EmptyDapsResponseException("JWT response is null.");
+                    throw new DapsEmptyResponseException("JWT response is null.");
                 }
                 var jwtString = responseBody.string();
                 LOG.info("Response body of token request:\n{}", jwtString);
@@ -165,11 +167,26 @@ public class TokenManagerService {
                 LOG.info("Dynamic Attribute Token: " + dynamicAttributeToken);
 
             }catch (IOException e) {
-                LOG.error(String.format("Error retrieving token: %s", e.getMessage()));
-            }catch (EmptyDapsResponseException e) {
-                LOG.error(String.format("Something else went wrong: %s", e.getMessage()));
-            }catch (MissingCertExtensionException e){
-                LOG.error("Certificate of the Connector is missing aki/ski extensions!");
+                var error = String.format("DAPS Token Manager Service - Error retrieving token and connecting to DAPS: %s", e.getMessage());
+                LOG.error(error);
+
+                if( container.getConfigModel().getConnectorDeployMode() != ConnectorDeployMode.TEST_DEPLOYMENT) {
+                    throw new DapsConnectionException(error);
+                }
+            }catch ( DapsEmptyResponseException e) {
+                var error = String.format("DAPS Token Manager Service - Empty DAPS Response, something went wrong: %s", e.getMessage());
+                LOG.error(error);
+
+                if( container.getConfigModel().getConnectorDeployMode() != ConnectorDeployMode.TEST_DEPLOYMENT) {
+                    throw new DapsEmptyResponseException(error);
+                }
+            }catch ( ConnectorMissingCertExtensionException e){
+                var error = "DAPS Token Manager Service - Certificate of the Connector is missing aki/ski extensions!";
+                LOG.error(error);
+
+                if( container.getConfigModel().getConnectorDeployMode() != ConnectorDeployMode.TEST_DEPLOYMENT) {
+                    throw new ConnectorMissingCertExtensionException(error);
+                }
             }
             return dynamicAttributeToken;
     }

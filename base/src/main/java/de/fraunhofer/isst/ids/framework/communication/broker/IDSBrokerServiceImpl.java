@@ -6,6 +6,9 @@ import de.fraunhofer.iais.eis.QueryTarget;
 import de.fraunhofer.iais.eis.Resource;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
+import de.fraunhofer.isst.ids.framework.daps.ConnectorMissingCertExtensionException;
+import de.fraunhofer.isst.ids.framework.daps.DapsConnectionException;
+import de.fraunhofer.isst.ids.framework.daps.DapsEmptyResponseException;
 import de.fraunhofer.isst.ids.framework.daps.DapsTokenProvider;
 import de.fraunhofer.isst.ids.framework.util.ClientProvider;
 import de.fraunhofer.isst.ids.framework.util.IDSUtils;
@@ -48,7 +51,11 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
 
     /** {@inheritDoc} */
     @Override
-    public Response removeResourceFromBroker(String brokerURI, Resource resource) throws IOException {
+    public Response removeResourceFromBroker(String brokerURI, Resource resource) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException {
         var securityToken = tokenProvider.getDAT();
         LOGGER.debug("Building message header");
         var connectorID = container.getConnector().getId();
@@ -61,7 +68,11 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
 
     /** {@inheritDoc} */
     @Override
-    public Response updateResourceAtBroker(String brokerURI, Resource resource) throws IOException {
+    public Response updateResourceAtBroker(String brokerURI, Resource resource) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException {
         var securityToken = tokenProvider.getDAT();
         LOGGER.debug("Building message header");
         var connectorID = container.getConnector().getId();
@@ -74,7 +85,11 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
 
     /** {@inheritDoc} */
     @Override
-    public Response unregisterAtBroker(String brokerURI) throws IOException {
+    public Response unregisterAtBroker(String brokerURI) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException {
         var securityToken = tokenProvider.getDAT();
         LOGGER.debug("Building message header");
         var connectorID = container.getConnector().getId();
@@ -87,7 +102,11 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
 
     /** {@inheritDoc} */
     @Override
-    public Response updateSelfDescriptionAtBroker(String brokerURI) throws IOException {
+    public Response updateSelfDescriptionAtBroker(String brokerURI) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException {
         var securityToken = tokenProvider.getDAT();
         LOGGER.debug("Building message header");
         var connectorID = container.getConnector().getId();
@@ -100,7 +119,11 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
 
     /** {@inheritDoc} */
     @Override
-    public java.util.List<Response> updateSelfDescriptionAtBrokers(java.util.List<String> brokerUris) throws IOException {
+    public java.util.List<Response> updateSelfDescriptionAtBrokers(java.util.List<String> brokerUris) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException {
         var securityToken = tokenProvider.getDAT();
         var result = new ArrayList<Response>();
         var connectorID = container.getConnector().getId();
@@ -130,7 +153,12 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
 
     /** {@inheritDoc} */
     @Override
-    public Response queryBroker(String brokerURI, String query, QueryLanguage queryLanguage, QueryScope queryScope, QueryTarget queryTarget) throws IOException {
+    public Response queryBroker(String brokerURI, String query, QueryLanguage queryLanguage, QueryScope queryScope, QueryTarget queryTarget)
+            throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException {
         var securityToken = tokenProvider.getDAT();
         LOGGER.debug("Building message header");
         var connectorID = container.getConnector().getId();

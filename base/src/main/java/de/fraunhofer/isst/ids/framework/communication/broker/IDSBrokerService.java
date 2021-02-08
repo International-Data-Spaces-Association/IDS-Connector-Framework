@@ -4,6 +4,9 @@ import de.fraunhofer.iais.eis.QueryLanguage;
 import de.fraunhofer.iais.eis.QueryScope;
 import de.fraunhofer.iais.eis.QueryTarget;
 import de.fraunhofer.iais.eis.Resource;
+import de.fraunhofer.isst.ids.framework.daps.ConnectorMissingCertExtensionException;
+import de.fraunhofer.isst.ids.framework.daps.DapsConnectionException;
+import de.fraunhofer.isst.ids.framework.daps.DapsEmptyResponseException;
 import okhttp3.Response;
 
 import java.io.IOException;
@@ -23,7 +26,11 @@ public interface IDSBrokerService {
      * @return the ResponseMessage of the Broker
      * @throws IOException if the built message could not be serialized
      */
-    Response removeResourceFromBroker(String brokerURI, Resource resource) throws IOException;
+    Response removeResourceFromBroker(String brokerURI, Resource resource) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException;
 
     /**
      * Builds and sends a {@link de.fraunhofer.iais.eis.ConnectorUpdateMessage} to the broker.
@@ -34,7 +41,11 @@ public interface IDSBrokerService {
      * @return the ResponseMessage of the Broker
      * @throws IOException if the built message could not be serialized
      */
-    Response updateResourceAtBroker(String brokerURI, Resource resource) throws IOException;
+    Response updateResourceAtBroker(String brokerURI, Resource resource) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException;
 
     /**
      * Builds and sends a {@link de.fraunhofer.iais.eis.ConnectorUnavailableMessage} to the broker.
@@ -44,7 +55,11 @@ public interface IDSBrokerService {
      * @return the ResponseMessage of the Broker (NotificationMessage if it worked, RejectionMessage if not)
      * @throws IOException if the message could not be serialized
      */
-    Response unregisterAtBroker(String brokerURI) throws IOException;
+    Response unregisterAtBroker(String brokerURI) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException;
 
     /**
      * Builds and sends a {@link de.fraunhofer.iais.eis.ConnectorUpdateMessage} to the broker.
@@ -55,7 +70,11 @@ public interface IDSBrokerService {
      * @return the ResponseMessage of the Broker (NotificationMessage if it worked, RejectionMessage if not)
      * @throws IOException if the built message could not be serialized
      */
-    Response updateSelfDescriptionAtBroker(String brokerURI) throws IOException;
+    Response updateSelfDescriptionAtBroker(String brokerURI) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException;
 
     /**
      * Builds and sends a {@link de.fraunhofer.iais.eis.ConnectorUpdateMessage} to a list of brokers
@@ -64,7 +83,11 @@ public interface IDSBrokerService {
      * @return a List of Responses from the Broker
      * @throws IOException if the built message could not be serialized
      */
-    List<Response> updateSelfDescriptionAtBrokers(List<String> brokerUris) throws IOException;
+    List<Response> updateSelfDescriptionAtBrokers(List<String> brokerUris) throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException;
 
     /**
      * Builds and sends a {@link de.fraunhofer.iais.eis.QueryMessage} to the broker.
@@ -77,5 +100,10 @@ public interface IDSBrokerService {
      * @return the brokers response to the query request
      * @throws IOException if the built message could not be serialized
      */
-    Response queryBroker(String brokerURI, String query, QueryLanguage queryLanguage, QueryScope queryScope, QueryTarget queryTarget) throws IOException;
+    Response queryBroker(String brokerURI, String query, QueryLanguage queryLanguage, QueryScope queryScope, QueryTarget queryTarget)
+            throws
+            IOException,
+            ConnectorMissingCertExtensionException,
+            DapsConnectionException,
+            DapsEmptyResponseException;
 }

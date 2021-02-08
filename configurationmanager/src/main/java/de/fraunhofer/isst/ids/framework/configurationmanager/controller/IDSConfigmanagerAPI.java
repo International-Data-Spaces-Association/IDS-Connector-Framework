@@ -1,5 +1,8 @@
 package de.fraunhofer.isst.ids.framework.configurationmanager.controller;
 
+import de.fraunhofer.isst.ids.framework.daps.ConnectorMissingCertExtensionException;
+import de.fraunhofer.isst.ids.framework.daps.DapsConnectionException;
+import de.fraunhofer.isst.ids.framework.daps.DapsEmptyResponseException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -22,7 +25,8 @@ public interface IDSConfigmanagerAPI {
             @ApiResponse(code = 500, message = "Unregistration at the broker failed")
     })
     @PostMapping(value = "/unregister")
-    ResponseEntity<String> unregisterConnectorAtBroker(@RequestBody String brokerID);
+    ResponseEntity<String> unregisterConnectorAtBroker(@RequestBody String brokerID)
+            throws ConnectorMissingCertExtensionException, DapsConnectionException, DapsEmptyResponseException;
 
     @ApiOperation(value = "Updates the connector at the broker")
     @ApiResponses({
@@ -30,7 +34,8 @@ public interface IDSConfigmanagerAPI {
             @ApiResponse(code = 500, message = "Update at the broker failed")
     })
     @PostMapping(value = "/update")
-    ResponseEntity<String> updateConnectorAtBroker(@RequestBody String brokerID);
+    ResponseEntity<String> updateConnectorAtBroker(@RequestBody String brokerID)
+            throws ConnectorMissingCertExtensionException, DapsConnectionException, DapsEmptyResponseException;
 
     @ApiOperation(value = "Updates the configuration")
     @ApiResponses({

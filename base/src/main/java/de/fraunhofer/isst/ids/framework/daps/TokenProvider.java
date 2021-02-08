@@ -60,7 +60,8 @@ public class TokenProvider implements DapsTokenProvider, DapsPublicKeyProvider {
      * @return acquire a new DAPS Token and return it as a {@link DynamicAttributeToken}
      */
     @Override
-    public DynamicAttributeToken getDAT() {
+    public DynamicAttributeToken getDAT()
+            throws ConnectorMissingCertExtensionException, DapsConnectionException, DapsEmptyResponseException {
         return new DynamicAttributeTokenBuilder()
                 ._tokenFormat_(TokenFormat.JWT)
                 ._tokenValue_(provideDapsToken())
@@ -73,7 +74,8 @@ public class TokenProvider implements DapsTokenProvider, DapsPublicKeyProvider {
      * @return acquire a new DAPS Token and return the JWT String value
      */
     @Override
-    public String provideDapsToken() {
+    public String provideDapsToken()
+            throws ConnectorMissingCertExtensionException, DapsConnectionException, DapsEmptyResponseException {
         LOGGER.debug(String.format("Get a new DAT Token from %s", dapsUrl));
         return TokenManagerService.acquireToken(configurationContainer, clientProvider, dapsUrl);
     }

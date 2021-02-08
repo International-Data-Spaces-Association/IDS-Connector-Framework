@@ -14,12 +14,14 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Fixed
 ### Security 
 
-## [4.0.8] - UNRELEASED
+## [5.0.0] - UNRELEASED
+-- New major version: Not backward compatible, requires adjustments by the connector developer. --
 ### Added
+- If an error occurs while fetching a DAPS DAT, an exception is returned to the connector developer instead of just logging this error and sending an IDS message with invalid DAT entry. The message for which a DAT should be organized is no longer sent as a result.
+ Exception structure: DapsTokenManagerException > DapsConnectionException, DapsEmptyResponseException, ConnectorMissingCertExtensionException
 - Repo: Conribution-Guideline and Code-of-Conduct files
 ### Changed
 - Update Infomodel dependency to Infomodel 4.0.5
-
 ## [4.0.7] - 2021-03-09
 ### Changed
 - IDSController now accepts messages with empty payloads
