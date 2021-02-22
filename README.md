@@ -1,4 +1,6 @@
-# IDS Connector Framework
+![image](./ids-framework-logo.png)
+
+# IDS Framework
 
 The IDS Framework aims to simplify the development of an IDS Connector.
 The Framework provides basic functionality encompassing creation and handling of IDS messages and communication to the DAPS and Brokers. However,
