@@ -1,4 +1,16 @@
-![image](./ids-framework-logo.png)
+<p align="center">
+<img src="ids-framework-logo.png">
+</p>
+
+<p align="center">
+<a href="https://github.com/International-Data-Spaces-Association/IDS-Connector-Framework/blob/development/LICENSE"><img src="https://img.shields.io/github/license/International-Data-Spaces-Association/IDS-Connector-Framework"></a>
+<a href="https://github.com/International-Data-Spaces-Association/IDS-Connector-Framework/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
+<img src="https://img.shields.io/github/workflow/status/International-Data-Spaces-Association/IDS-Connector-Framework/Development-SNAPSHOT">
+<img src="https://img.shields.io/github/languages/code-size/International-Data-Spaces-Association/IDS-Connector-Framework">
+<img src="https://img.shields.io/github/v/release/International-Data-Spaces-Association/IDS-Connector-Framework">
+<img src="https://img.shields.io/github/contributors/International-Data-Spaces-Association/IDS-Connector-Framework">
+</p>
+
 
 # IDS Framework
 
