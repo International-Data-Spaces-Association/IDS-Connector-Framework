@@ -23,7 +23,7 @@
 
     <properties>
         <springfox-swagger.version>2.9.2</springfox-swagger.version>
-        <spring-web.version>5.2.1.RELEASE</spring-web.version>
+        <spring-web.version>5.3.4</spring-web.version>
 
         <sonar.projectKey>de.fraunhofer.isst.ids.framework.configurationmanager</sonar.projectKey>
     </properties>
