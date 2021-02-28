@@ -14,6 +14,10 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Fixed
 ### Security 
 
+## [4.0.6] - 2021-02-28
+### Recommended Security Update
+- Updated used springframework dependencies
+
 ## [4.0.5] - 2021-02-12
 ### Changed
 - Received RejectionMessages are now passed to the connector-developer, regardless of the status of the DAT within the received RejectionMessage
