@@ -62,9 +62,9 @@ public class IDSController {
             final var headerPart = request.getPart(HEADER_MULTIPART_NAME);
             final var payloadPart = request.getPart(PAYLOAD_MULTIPART_NAME);
 
-            if (headerPart == null || payloadPart == null) {
+            if (headerPart == null) {
                 log.debug("header or payload of incoming message were empty!");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createDefaultErrorMessage(RejectionReason.MALFORMED_MESSAGE, "Header or Payload was missing!"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createDefaultErrorMessage(RejectionReason.MALFORMED_MESSAGE, "Header was missing!"));
             }
 
             String input;
@@ -77,7 +77,7 @@ public class IDSController {
             final var requestHeader = serializer.deserialize(input, Message.class);
 
             log.debug("hand the incoming message to the message dispatcher!");
-            final var response = this.messageDispatcher.process(requestHeader, payloadPart.getInputStream());
+            final var response = this.messageDispatcher.process(requestHeader, payloadPart == null ? null : payloadPart.getInputStream()); //pass null if payloadPart is null, else pass it as inputStream
 
             //get Response as MultiValueMap
             final var responseAsMap = createMultiValueMap(response.createMultipartMap(serializer));
