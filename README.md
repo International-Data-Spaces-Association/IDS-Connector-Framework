@@ -9,6 +9,7 @@
 <img src="https://img.shields.io/github/languages/code-size/International-Data-Spaces-Association/IDS-Connector-Framework">
 <img src="https://img.shields.io/github/v/release/International-Data-Spaces-Association/IDS-Connector-Framework">
 <img src="https://img.shields.io/github/contributors/International-Data-Spaces-Association/IDS-Connector-Framework">
+<img src="https://img.shields.io/badge/Dependabot-Active-green">
 </p>
 
 
