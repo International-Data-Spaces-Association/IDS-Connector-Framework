@@ -14,6 +14,10 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Fixed
 ### Security 
 
+## [4.0.8] - UNRELEASED
+### Added
+- Repo: Conribution-Guideline and Code-of-Conduct files
+
 ## [4.0.7] - 2021-03-09
 ### Changed
 - IDSController now accepts messages with empty payloads
