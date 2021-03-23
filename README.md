@@ -41,7 +41,7 @@ It will be developed continuously to improve and simplify the development of IDS
 
 ## Prerequisites
 
-- The Framework  uses asynchronous encryption concepts and requires public and private key of the Connector instance. 
+- The Framework uses asymmetric encryption and requires public and private key of the Connector instance. 
 - Furthermore, it utilizes the IDS Configurationmodel which was developed within the IDS Informationmodel. Therefor a 
 `configmodel.json` file should exist to load the configuration of the Connector into the Configurationmodel. An example of that can be seen inside the Demo Connector project. 
 The configuration file should reference the key and trust store.
