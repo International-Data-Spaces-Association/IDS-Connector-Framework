@@ -56,7 +56,6 @@ public class IDSController {
      * @param request incoming http request
      * @return multipart MultivalueMap containing ResponseMessage header and some payload
      */
-    @Transactional
     public ResponseEntity<MultiValueMap<String, Object>> handleIDSMessage(final HttpServletRequest request) {
         try {
             final var headerPart = request.getPart(HEADER_MULTIPART_NAME);
