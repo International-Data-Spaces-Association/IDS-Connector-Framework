@@ -1,6 +1,17 @@
 package de.fraunhofer.isst.ids.framework.messaging.handling;
 
-import de.fraunhofer.iais.eis.*;
+import javax.servlet.http.HttpServletRequest;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
+import de.fraunhofer.iais.eis.Connector;
+import de.fraunhofer.iais.eis.DynamicAttributeTokenBuilder;
+import de.fraunhofer.iais.eis.NotificationMessageBuilder;
+import de.fraunhofer.iais.eis.RequestMessageBuilder;
+import de.fraunhofer.iais.eis.ResponseMessage;
+import de.fraunhofer.iais.eis.ResponseMessageBuilder;
+import de.fraunhofer.iais.eis.TokenFormat;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.daps.DapsTokenProvider;
@@ -28,11 +39,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-
 import static de.fraunhofer.isst.ids.framework.messaging.handling.IDSControllerIntegrationTest.TestContextConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -42,14 +48,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Test the IDS Messaging module
  */
 @Slf4j
-@RunWith(SpringRunner.class)
 @WebMvcTest
+@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {IDSController.class, TestContextConfiguration.class})
 public class IDSControllerIntegrationTest {
 
     @Configuration
     static class TestContextConfiguration {
-
         @Bean
         public Serializer getSerializer(){
             return new Serializer();
@@ -86,7 +91,7 @@ public class IDSControllerIntegrationTest {
     @Test
     public void testGetValidMultipartReturn() throws Exception {
 
-        RequestMappingInfo requestMappingInfo = RequestMappingInfo
+        final var requestMappingInfo = RequestMappingInfo
                 .paths("/api/ids/data")
                 .methods(RequestMethod.POST)
                 .consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -101,7 +106,7 @@ public class IDSControllerIntegrationTest {
 
         // Create the message header that shall be send and tested
         //final var queryHeader = new RequestMessageBuilder()._modelVersion_("1.0.3")._issued_(Util.getGregorianNow()).build();
-        DynamicAttributeToken token = new DynamicAttributeTokenBuilder()
+        final var token = new DynamicAttributeTokenBuilder()
                 ._tokenFormat_(TokenFormat.JWT)
                 ._tokenValue_("Token")
                 .build();
@@ -123,7 +128,7 @@ public class IDSControllerIntegrationTest {
 
         // Define mocking behaviour of the messageDispatcher.process() as well as the connector.getSelfDeclarationURL()
         final var mockResponseBody = "mock response";
-        var responseMessage = new ResponseMessageBuilder()
+        final var responseMessage = new ResponseMessageBuilder()
                 ._correlationMessage_(msgHeader.getId())
                 ._issuerConnector_(configurationContainer.getConnector().getId())
                 ._issued_(IDSUtils.getGregorianNow())
@@ -133,9 +138,9 @@ public class IDSControllerIntegrationTest {
 
         Mockito.when(messageDispatcher.process(Mockito.any(), Mockito.any())).thenReturn(BodyResponse.create(responseMessage, mockResponseBody));
 
-        String header = serializer.serialize(msgHeader);
+        final var header = serializer.serialize(msgHeader);
 
-        String header2 = serializer.serialize(notificationHeader);
+        final var header2 = serializer.serialize(notificationHeader);
 
         // Create the message payload that shall be send and tested
         final var queryPayload = new TestPayload(Arrays.asList("1", "2", "3"));
@@ -170,7 +175,7 @@ public class IDSControllerIntegrationTest {
 
         final var response = result.getResponse();
         final var multiPartResp = MultipartStringParser.stringToMultipart(response.getContentAsString());
-        String respHead = multiPartResp.get("header");//.replaceAll("UTC","+0000");
+        final var respHead = multiPartResp.get("header");//.replaceAll("UTC","+0000");
 
         final var responseHeader = serializer.deserialize(respHead, ResponseMessage.class);
 

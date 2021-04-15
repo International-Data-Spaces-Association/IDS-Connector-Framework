@@ -1,32 +1,32 @@
 package de.fraunhofer.isst.ids.framework.util;
 
-import de.fraunhofer.iais.eis.ConfigurationModel;
-import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
-import de.fraunhofer.isst.ids.framework.configuration.KeyStoreManager;
-import okhttp3.Authenticator;
-import okhttp3.Credentials;
-import okhttp3.OkHttpClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
-import java.net.*;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.ProxySelector;
+import java.net.SocketAddress;
+import java.net.URI;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fraunhofer.iais.eis.ConfigurationModel;
+import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
+import de.fraunhofer.isst.ids.framework.configuration.KeyStoreManager;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.Authenticator;
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+
 /**
  * The ClientProvider uses the {@link ConfigurationContainer} to rebuild clients, when a new configurationContainer is created
  */
+@Slf4j
 public class ClientProvider {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(ClientProvider.class);
 
     private ConfigurationContainer configContainer;
     private OkHttpClient client;
@@ -38,7 +38,7 @@ public class ClientProvider {
      * @throws NoSuchAlgorithmException if the cryptographic is unknown when building an {@link OkHttpClient}
      * @throws KeyManagementException   if there is an error with any configured key when building an {@link OkHttpClient}
      */
-    public ClientProvider(ConfigurationContainer configContainer) throws KeyManagementException, NoSuchAlgorithmException {
+    public ClientProvider(final ConfigurationContainer configContainer) throws KeyManagementException, NoSuchAlgorithmException {
         this.configContainer = configContainer;
         this.client = createClientBuilder(configContainer.getConfigModel(), configContainer.getKeyManager()).build();
     }
@@ -71,10 +71,13 @@ public class ClientProvider {
      * @param callTimeout max timeout for the whole http request (null = default values are used)
      * @return an OkHttpClient configured using the current connector configuration and truststore certificates, with the given timeouts set
      */
-    public OkHttpClient getClientWithTimeouts(Duration connectTimeout, Duration readTimeout, Duration writeTimeout, Duration callTimeout) {
-        LOGGER.debug("Creating OkHttp client");
-        var withTimeout = rebuildClientWithTimeouts(client, connectTimeout, readTimeout, writeTimeout, callTimeout);
-        LOGGER.info("Ok Http Client Protocols" + withTimeout.protocols());
+    public OkHttpClient getClientWithTimeouts(final Duration connectTimeout,
+                                              final Duration readTimeout,
+                                              final Duration writeTimeout,
+                                              final Duration callTimeout) {
+        log.debug("Creating OkHttp client");
+        final var withTimeout = rebuildClientWithTimeouts(client, connectTimeout, readTimeout, writeTimeout, callTimeout);
+        log.info("Ok Http Client Protocols" + withTimeout.protocols());
         return withTimeout;
     }
 
@@ -88,27 +91,31 @@ public class ClientProvider {
      * @param callTimeout max timeout for the whole http request (null = default values are used)
      * @return an OkHttpClient rebuilt with the given timeouts
      */
-    private OkHttpClient rebuildClientWithTimeouts(OkHttpClient client, Duration connectTimeout, Duration readTimeout, Duration writeTimeout, Duration callTimeout){
-        var builder = client.newBuilder();
+    private OkHttpClient rebuildClientWithTimeouts(final OkHttpClient client,
+                                                   final Duration connectTimeout,
+                                                   final Duration readTimeout,
+                                                   final Duration writeTimeout,
+                                                   final Duration callTimeout){
+        final var builder = client.newBuilder();
         if(connectTimeout != null){
-            LOGGER.debug(String.format("Setting connect timeout: %s ", connectTimeout.toString()));
+            log.debug(String.format("Setting connect timeout: %s ", connectTimeout.toString()));
             builder.connectTimeout(connectTimeout);
         }
         if(readTimeout != null){
-            LOGGER.debug(String.format("Setting read timeout: %s ", readTimeout.toString()));
+            log.debug(String.format("Setting read timeout: %s ", readTimeout.toString()));
             builder.readTimeout(readTimeout);
         }
         if(writeTimeout != null){
-            LOGGER.debug(String.format("Setting write timeout: %s ", writeTimeout.toString()));
+            log.debug(String.format("Setting write timeout: %s ", writeTimeout.toString()));
             builder.writeTimeout(writeTimeout);
         }
         if(callTimeout != null){
-            LOGGER.debug(String.format("Setting call timeout: %s ", callTimeout.toString()));
+            log.debug(String.format("Setting call timeout: %s ", callTimeout.toString()));
             builder.callTimeout(callTimeout);
         }
-        LOGGER.debug("Building client!");
-        OkHttpClient okHttpClient = builder.build();
-        LOGGER.info("Ok Http Client Protocols" + okHttpClient.protocols());
+        log.debug("Building client!");
+        final var okHttpClient = builder.build();
+        log.info("Ok Http Client Protocols" + okHttpClient.protocols());
         return okHttpClient;
     }
 
@@ -122,27 +129,30 @@ public class ClientProvider {
      * @throws NoSuchAlgorithmException if the cryptographic is unknown
      * @throws KeyManagementException   if there is an error with any configured key
      */
-    private static OkHttpClient.Builder createClientBuilder(ConfigurationModel connector, KeyStoreManager manager) throws NoSuchAlgorithmException, KeyManagementException {
-        LOGGER.debug("Creating OkHttp client");
-        OkHttpClient.Builder builder = new OkHttpClient.Builder(); //TODO custom Timeouts?
+    private static OkHttpClient.Builder createClientBuilder(final ConfigurationModel connector,
+                                                            final KeyStoreManager manager)
+            throws NoSuchAlgorithmException, KeyManagementException {
 
-        X509TrustManager trustManager = manager.getTrustManager();
-        SSLContext sslContext = SSLContext.getInstance("TLS"); //TODO catch here, should never happen
+        log.debug("Creating OkHttp client");
+        final var builder = new OkHttpClient.Builder(); //TODO custom Timeouts?
+
+        final var trustManager = manager.getTrustManager();
+        final var sslContext = SSLContext.getInstance("TLS"); //TODO catch here, should never happen
         sslContext.init(null, new TrustManager[]{trustManager}, null);
-        SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+        final var sslSocketFactory = sslContext.getSocketFactory();
         builder.sslSocketFactory(sslSocketFactory, trustManager);
-        LOGGER.debug("Created SSLSocketFactory");
+        log.debug("Created SSLSocketFactory");
 
         //if the connector has a proxy set
         if(connector.getConnectorProxy() != null) {
             //if there is any proxy in the proxylist
-            var proxyconf = connector.getConnectorProxy().stream().findAny().orElse(null);
+            final var proxyconf = connector.getConnectorProxy().stream().findAny().orElse(null);
             if (proxyconf != null) {
-                LOGGER.debug("Proxy is set active! Configuring Proxy.");
+                log.debug("Proxy is set active! Configuring Proxy.");
                 //create and set Proxy Authenticator with BasicAuth if proxy username and password are set
                 if (proxyconf.getProxyAuthentication() != null && proxyconf.getProxyAuthentication().getAuthUsername() != null && proxyconf.getProxyAuthentication().getAuthPassword() != null) {
-                    LOGGER.debug("Setting Proxy Authenticator");
-                    Authenticator proxyAuthenticator = (route, response) -> {
+                    log.debug("Setting Proxy Authenticator");
+                    final Authenticator proxyAuthenticator = (route, response) -> {
                         String credential = Credentials.basic(proxyconf.getProxyAuthentication().getAuthUsername(), proxyconf.getProxyAuthentication().getAuthPassword());
                         return response.request().newBuilder()
                                 .header("Proxy-Authorization", credential)
@@ -150,9 +160,9 @@ public class ClientProvider {
                     };
                     builder.proxyAuthenticator(proxyAuthenticator);
                 }else{
-                    LOGGER.debug("No Proxy Authentication credentials are set!");
+                    log.debug("No Proxy Authentication credentials are set!");
                 }
-                LOGGER.debug("Create a ProxySelector");
+                log.debug("Create a ProxySelector");
                 //create a custom proxySelector (will select the proxy when request goes to host not in NO_PROXY list, and NO_PROXY otherwise)
                 final ProxySelector proxySelector = new ProxySelector() {
                     @Override
@@ -160,17 +170,17 @@ public class ClientProvider {
                         //create a List of size 1 containing the possible Proxy
                         final List<Proxy> proxyList = new ArrayList<>(1);
                         if (proxyconf.getNoProxy().contains(uri)) {
-                            LOGGER.debug(String.format("URI %s is in NoProxy List, no proxy is used", uri.toString()));
+                            log.debug(String.format("URI %s is in NoProxy List, no proxy is used", uri.toString()));
                             //if the called uri is in the Exceptions of the Connectors ProxyConfiguration use no proxy
                             proxyList.add(Proxy.NO_PROXY);
                         } else {
-                            LOGGER.debug(String.format("URI %s is not in NoProxy List, use configured Proxy", uri.toString()));
+                            log.debug(String.format("URI %s is not in NoProxy List, use configured Proxy", uri.toString()));
                             //else use proxy with ProxyConfig
                             //TODO get Proxy from URI
-                            URI proxyAddress = proxyconf.getProxyURI();
-                            String proxyHost = proxyAddress.getHost();
+                            var proxyAddress = proxyconf.getProxyURI();
+                            var proxyHost = proxyAddress.getHost();
                             int proxyPort = proxyAddress.getPort();
-                            LOGGER.info("Address: " + proxyHost + " ,Port: " + proxyPort);
+                            log.info("Address: " + proxyHost + " ,Port: " + proxyPort);
                             proxyList.add(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
                         }
                         return proxyList;

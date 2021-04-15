@@ -1,15 +1,15 @@
 package de.fraunhofer.isst.ids.framework.communication.http;
 
-import de.fraunhofer.isst.ids.framework.daps.ClaimsException;
-import okhttp3.RequestBody;
-import org.apache.commons.fileupload.FileUploadException;
-
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
+import de.fraunhofer.isst.ids.framework.daps.ClaimsException;
+import okhttp3.RequestBody;
+import org.apache.commons.fileupload.FileUploadException;
+
 /**
- * Interface for IDS Http Communication
+ * Interface for IDS Http Communication.
  */
 public interface IDSHttpService {
 

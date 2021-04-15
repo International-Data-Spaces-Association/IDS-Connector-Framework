@@ -1,6 +1,19 @@
 package de.fraunhofer.isst.ids.framework.messaging.handling;
 
-import de.fraunhofer.iais.eis.*;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+import de.fraunhofer.iais.eis.DynamicAttributeTokenBuilder;
+import de.fraunhofer.iais.eis.Message;
+import de.fraunhofer.iais.eis.RejectionMessageBuilder;
+import de.fraunhofer.iais.eis.RejectionReason;
+import de.fraunhofer.iais.eis.TokenFormat;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.messaging.model.filters.PreProcessingException;
@@ -11,22 +24,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
 /**
- * REST controller for handling all incoming IDS multipart Messages
+ * REST controller for handling all incoming IDS multipart Messages.
  */
 @Slf4j
 @Controller
@@ -91,11 +93,11 @@ public class IDSController {
         } catch (PreProcessingException e) {
             log.error("Error during pre-processing with a PreDispatchingFilter!", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createDefaultErrorMessage(RejectionReason.BAD_PARAMETERS, String.format("Error during preprocessing: %s", e.getMessage())));
-        } catch (IOException e){
+        } catch (IOException e) {
             log.warn("incoming message could not be parsed!");
             log.warn(e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createDefaultErrorMessage(RejectionReason.MALFORMED_MESSAGE, "Could not parse incoming message!"));
-        } catch (ServletException e){
+        } catch (ServletException e) {
             log.warn("incoming request was not multipart!");
             log.warn(e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createDefaultErrorMessage(RejectionReason.INTERNAL_RECIPIENT_ERROR, String.format("Could not read incoming request! Error: %s", e.getMessage())));
@@ -103,30 +105,31 @@ public class IDSController {
     }
 
     /**
-     * Create a Spring {@link MultiValueMap} from a {@link java.util.Map}
+     * Create a Spring {@link MultiValueMap} from a {@link java.util.Map}.
      *
      * @param map a map as provided by the MessageResponse
      * @return a MultiValueMap used as ResponseEntity for Spring
      */
-    private MultiValueMap<String, Object> createMultiValueMap(Map<String, Object> map){
+    private MultiValueMap<String, Object> createMultiValueMap(final Map<String, Object> map) {
         log.debug("Creating MultiValueMap for the response");
-        var multiMap = new LinkedMultiValueMap<String, Object>();
-        for(var entry : map.entrySet()){
+        final var multiMap = new LinkedMultiValueMap<String, Object>();
+        for (final var entry : map.entrySet()) {
             multiMap.put(entry.getKey(), List.of(entry.getValue()));
         }
         return multiMap;
     }
 
     /**
-     * Create a default RejectionMessage with a given RejectionReason and specific error message for the payload
+     * Create a default RejectionMessage with a given RejectionReason and specific error message for the payload.
      *
      * @param rejectionReason reason why the message was rejected
      * @param errorMessage a specific error message for the payload
      * @return MultiValueMap with given error information that can be used for a multipart response
      */
-    private MultiValueMap<String, Object> createDefaultErrorMessage(RejectionReason rejectionReason, String errorMessage){
+    private MultiValueMap<String, Object> createDefaultErrorMessage(final RejectionReason rejectionReason,
+                                                                    final String errorMessage) {
         try {
-            var rejectionMessage = new RejectionMessageBuilder()
+            final var rejectionMessage = new RejectionMessageBuilder()
                     ._securityToken_(new DynamicAttributeTokenBuilder()._tokenFormat_(TokenFormat.JWT)._tokenValue_("rejected!").build())
                     ._correlationMessage_(URI.create("https://INVALID"))
                     ._senderAgent_(configurationContainer.getConnector().getId())
@@ -135,7 +138,7 @@ public class IDSController {
                     ._issuerConnector_(configurationContainer.getConnector().getId())
                     ._issued_(IDSUtils.getGregorianNow())
                     .build();
-            var multiMap = new LinkedMultiValueMap<String, Object>();
+            final var multiMap = new LinkedMultiValueMap<String, Object>();
             multiMap.put(HEADER_MULTIPART_NAME, List.of(serializer.serialize(rejectionMessage)));
             multiMap.put(PAYLOAD_MULTIPART_NAME, List.of(errorMessage));
             return multiMap;

@@ -1,23 +1,29 @@
 package de.fraunhofer.isst.ids.framework.communication.mqtt;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.eclipse.paho.client.mqttv3.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
 /**
  * This class implements IDSCommunication for the MQTT Protocol.
  */
+@Slf4j
 public class IDSMQTTCommunication {
-    private static final Logger LOGGER = LoggerFactory.getLogger(IDSMQTTCommunication.class);
+
     private Queue<String> messageQueue;
+
     @Getter @Setter
     private MqttClient client = null;
+
     @Getter
     private final MqttConnectOptions opt;
 
@@ -33,7 +39,7 @@ public class IDSMQTTCommunication {
      * @param mqtt Configuration for MQTT
      * @throws MqttException if mqtt client creation or connection establishing fail
      */
-    public void connectClient(ProtocolMqtt mqtt) throws MqttException {
+    public void connectClient(final ProtocolMqtt mqtt) throws MqttException {
         opt.setCleanSession(true);
         opt.setUserName(mqtt.getBasicAuthentication().getAuthUsername());
         opt.setPassword(mqtt.getBasicAuthentication().getAuthPassword().toCharArray());
@@ -45,7 +51,7 @@ public class IDSMQTTCommunication {
             opt.setSSLProperties(mqtt.getSslProperties());
         }
 
-        String serverURI = mqtt.getUri().toString();
+        final var serverURI = mqtt.getUri().toString();
         client = new MqttClient(serverURI, mqtt.getClientId() != null ? mqtt.getClientId() : MqttClient.generateClientId());
 
         client.connect(opt);
@@ -58,25 +64,25 @@ public class IDSMQTTCommunication {
      * @param mqtt            Configuration for MQTT
      * @return true if the payload was successfully sent, else false.
      */
-    public boolean send(String payload, ProtocolMqtt mqtt) {
+    public boolean send(final String payload, final ProtocolMqtt mqtt) {
         try {
             if (client == null || !client.isConnected()) {
                 connectClient(mqtt);
             }
 
-            MqttMessage message = new MqttMessage(payload.getBytes());
+            final var message = new MqttMessage(payload.getBytes());
             message.setQos(mqtt.getQos());
 
             client.publish(mqtt.getTopic(), message);
             return true;
 
         } catch (MqttException e) {
-            LOGGER.error(
-                    "Error on MQTT Communication" + "\n" +
-                            "reason: " + e.getReasonCode() + "\n" +
-                            "message: " + e.getMessage() + "\n" +
-                            "loc: " + e.getLocalizedMessage() + "\n" +
-                            "cause: " + e.getCause() + "\n", e);
+            log.error(
+                    "Error on MQTT Communication" + "\n"
+                            + "reason: " + e.getReasonCode() + "\n"
+                            + "message: " + e.getMessage() + "\n"
+                            + "loc: " + e.getLocalizedMessage() + "\n"
+                            + "cause: " + e.getCause() + "\n", e);
             return false;
         }
     }
@@ -87,7 +93,7 @@ public class IDSMQTTCommunication {
      * @param mqtt            Configuration for MQTT
      * @return true if the payload was successfully sent, else false.
      */
-    public boolean subscribe(ProtocolMqtt mqtt) {
+    public boolean subscribe(final ProtocolMqtt mqtt) {
         return subscribe(mqtt, (topic, mqttMessage) ->
                 messageQueue.add(String.format("Topic: %s. Payload: %s.", topic, new String(mqttMessage.getPayload(), StandardCharsets.UTF_8))));
     }
@@ -99,7 +105,7 @@ public class IDSMQTTCommunication {
      * @param messageListener Listener with callback for message arriving
      * @return true if the payload was successfully sent, else false.
      */
-    public boolean subscribe(ProtocolMqtt mqtt, IMqttMessageListener messageListener) {
+    public boolean subscribe(final ProtocolMqtt mqtt, final IMqttMessageListener messageListener) {
         try {
             if (client == null || !client.isConnected()) {
                 connectClient(mqtt);
@@ -109,12 +115,12 @@ public class IDSMQTTCommunication {
 
             return true;
         } catch (MqttException e) {
-            LOGGER.error(
-                    "Error on MQTT Communication" + "\n" +
-                            "reason: " + e.getReasonCode() + "\n" +
-                            "message: " + e.getMessage() + "\n" +
-                            "loc: " + e.getLocalizedMessage() + "\n" +
-                            "cause: " + e.getCause() + "\n", e);
+            log.error(
+                    "Error on MQTT Communication" + "\n"
+                            + "reason: " + e.getReasonCode() + "\n"
+                            + "message: " + e.getMessage() + "\n"
+                            + "loc: " + e.getLocalizedMessage() + "\n"
+                            + "cause: " + e.getCause() + "\n", e);
             return false;
         }
     }

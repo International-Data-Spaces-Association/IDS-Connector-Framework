@@ -38,44 +38,6 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>uml-gen</id>
-            <dependencies>
-                <!-- https://mvnrepository.com/artifact/de.elnarion.maven/plantuml-generator-maven-plugin -->
-                <dependency>
-                    <groupId>de.elnarion.maven</groupId>
-                    <artifactId>plantuml-generator-maven-plugin</artifactId>
-                    <version>1.0.0</version>
-                </dependency>
-            </dependencies>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>plantuml-generator-maven-plugin</artifactId>
-                        <groupId>de.elnarion.maven</groupId>
-                        <version>1.0.0</version>
-                        <executions>
-                            <execution>
-                                <id>generate-entity-diagram</id>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                                <phase>generate-test-sources</phase>
-                                <configuration>
-                                    <outputFilename>entities.puml</outputFilename>
-                                    <scanPackages>
-                                        <scanPackage>
-                                            de.fraunhofer.isst.ids.framework
-                                        </scanPackage>
-                                    </scanPackages>
-                                    <hideMethods>true</hideMethods>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 
     <dependencies>

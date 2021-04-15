@@ -1,16 +1,16 @@
 package de.fraunhofer.isst.ids.framework.communication.broker;
 
+import java.io.IOException;
+import java.util.List;
+
 import de.fraunhofer.iais.eis.QueryLanguage;
 import de.fraunhofer.iais.eis.QueryScope;
 import de.fraunhofer.iais.eis.QueryTarget;
 import de.fraunhofer.iais.eis.Resource;
 import okhttp3.Response;
 
-import java.io.IOException;
-import java.util.List;
-
 /**
- * Interface for Communication with IDS Brokers, implemented by {@link IDSBrokerServiceImpl}
+ * Interface for Communication with IDS Brokers, implemented by {@link IDSBrokerServiceImpl}.
  */
 public interface IDSBrokerService {
 
@@ -58,7 +58,7 @@ public interface IDSBrokerService {
     Response updateSelfDescriptionAtBroker(String brokerURI) throws IOException;
 
     /**
-     * Builds and sends a {@link de.fraunhofer.iais.eis.ConnectorUpdateMessage} to a list of brokers
+     * Builds and sends a {@link de.fraunhofer.iais.eis.ConnectorUpdateMessage} to a list of brokers.
      *
      * @param brokerUris URIs of the brokers the connector will try to update its information at
      * @return a List of Responses from the Broker

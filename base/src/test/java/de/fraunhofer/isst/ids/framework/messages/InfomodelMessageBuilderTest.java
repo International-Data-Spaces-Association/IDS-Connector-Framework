@@ -23,7 +23,7 @@ public class InfomodelMessageBuilderTest {
      */
     @Test
     public void testBuildMessage() throws IOException {
-        var header = new RequestMessageBuilder()
+        final var header = new RequestMessageBuilder()
                 ._issued_(IDSUtils.getGregorianNow())
                 ._issuerConnector_(URI.create("https://example.com"))
                 ._senderAgent_(URI.create("https://example.com"))
