@@ -1,113 +1,112 @@
 package de.fraunhofer.isst.ids.framework.configuration;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+
 import de.fraunhofer.iais.eis.ConfigurationModel;
 import de.fraunhofer.iais.eis.Connector;
 import de.fraunhofer.isst.ids.framework.util.ClientProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The ConfigurationContainer wraps the current configuration with the respective key- and truststore,
  * and manages changes of the configuration.
  */
+@Slf4j
 public class ConfigurationContainer {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationContainer.class);
 
     private ConfigurationModel configurationModel;
     private KeyStoreManager keyStoreManager;
     private ClientProvider clientProvider;
 
     /**
-     * Create a ConfigurationContainer with a ConfigurationModel and KeyStoreManager
+     * Create a ConfigurationContainer with a ConfigurationModel and KeyStoreManager.
      *
      * @param configurationModel the initial {@link ConfigurationModel} of the Connector
      * @param keyStoreManager the KeyStoreManager, managing Key- and Truststore of the Connector
      */
-    public ConfigurationContainer(ConfigurationModel configurationModel, KeyStoreManager keyStoreManager){
+    public ConfigurationContainer(final ConfigurationModel configurationModel, final KeyStoreManager keyStoreManager) {
         this.configurationModel = configurationModel;
         this.keyStoreManager = keyStoreManager;
     }
 
     /**
-     * Setter for a {@link ClientProvider}
+     * Setter for a {@link ClientProvider}.
      *
      * @param provider the ClientProvider
      */
-    public void setClientProvider(ClientProvider provider){
+    public void setClientProvider(final ClientProvider provider) {
         this.clientProvider = provider;
     }
 
     /**
-     * Getter for the {@link ConfigurationModel}
+     * Getter for the {@link ConfigurationModel}.
      *
      * @return the managed ConfigurationModel
      */
-    public ConfigurationModel getConfigModel(){
+    public ConfigurationModel getConfigModel() {
         return this.configurationModel;
     }
 
     /**
-     * Getter for the {@link Connector} (ConnectorDescription of the {@link ConfigurationModel})
+     * Getter for the {@link Connector} (ConnectorDescription of the {@link ConfigurationModel}).
      *
      * @return the ConnectorDescription of the managed ConfigurationModel
      */
-    public Connector getConnector(){
+    public Connector getConnector() {
         return this.configurationModel.getConnectorDescription();
     }
 
     /**
      * Getter for the {@link KeyStoreManager}
      *
-     * @return the keymanager for Key- and Truststore defined by the ConfigurationModel
+     * @return the keymanager for Key- and Truststore defined by the ConfigurationModel.
      */
-    public KeyStoreManager getKeyManager(){
+    public KeyStoreManager getKeyManager() {
         return this.keyStoreManager;
     }
 
     /**
      * Update the ConfigurationContainer with a new {@link ConfigurationModel}, rebuild the KeyStoreManager with
-     * new Configuration in the process
+     * new Configuration in the process.
      *
      * @param configurationModel the new configurationModel that replaces the current one
      * @throws ConfigurationUpdateException when the Key- and Truststore in the new Connector cannot be initialized
      */
-    public void updateConfiguration(ConfigurationModel configurationModel) throws ConfigurationUpdateException {
+    public void updateConfiguration(final ConfigurationModel configurationModel) throws ConfigurationUpdateException {
         try {
-            LOGGER.debug("Updating the current configuration");
-            var manager = rebuildKeyStoreManager(configurationModel);
-            LOGGER.debug("KeyStoreManager rebuilt");
+            log.debug("Updating the current configuration");
+            final var manager = rebuildKeyStoreManager(configurationModel);
+            log.debug("KeyStoreManager rebuilt");
             this.configurationModel = configurationModel;
             this.keyStoreManager = manager;
-            if(clientProvider != null){
+            if (clientProvider != null) {
                 clientProvider.updateConfig();
-                LOGGER.debug("ClientProvider updated!");
+                log.debug("ClientProvider updated!");
             }
         } catch (KeyStoreManagerInitializationException e) {
-            LOGGER.error("Configuration could not be updated! Keeping old configuration!");
+            log.error("Configuration could not be updated! Keeping old configuration!");
             throw new ConfigurationUpdateException(e.getMessage(), e.getCause());
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            LOGGER.error("New Key- or Truststore could not be initialized! Keeping old configuration!");
-            LOGGER.error(e.getMessage(), e);
+            log.error("New Key- or Truststore could not be initialized! Keeping old configuration!");
+            log.error(e.getMessage(), e);
             throw new ConfigurationUpdateException(e.getMessage(), e.getCause());
         }
     }
 
     /**
-     * Rebuild the {@link KeyStoreManager} with a given configuration
+     * Rebuild the {@link KeyStoreManager} with a given configuration.
      *
      * @param configurationModel the current ConfigurationModel
      * @return the newly built KeyStoreManager
      * @throws KeyStoreManagerInitializationException when the new KeyStoreManager cannot be initialized
      */
-    private KeyStoreManager rebuildKeyStoreManager(ConfigurationModel configurationModel) throws KeyStoreManagerInitializationException {
-        LOGGER.debug("Creating a new KeyStoreManager using current configuration");
-        var keyPw = keyStoreManager.getKeyStorePw();
-        var trustPw = keyStoreManager.getTrustStorePw();
-        var alias = keyStoreManager.getKeyAlias();
+    private KeyStoreManager rebuildKeyStoreManager(final ConfigurationModel configurationModel)
+            throws KeyStoreManagerInitializationException {
+        log.debug("Creating a new KeyStoreManager using current configuration");
+        final var keyPw = keyStoreManager.getKeyStorePw();
+        final var trustPw = keyStoreManager.getTrustStorePw();
+        final var alias = keyStoreManager.getKeyAlias();
         return new KeyStoreManager(configurationModel, keyPw, trustPw, alias);
     }
 

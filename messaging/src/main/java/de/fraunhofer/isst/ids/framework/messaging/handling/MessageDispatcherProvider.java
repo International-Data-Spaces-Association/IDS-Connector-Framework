@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
- * Providing a MessageDispatcher as a bean, for autowiring
+ * Providing a MessageDispatcher as a bean, for autowiring.
  */
-@Component
 @Slf4j
+@Component
 public class MessageDispatcherProvider {
 
     /**

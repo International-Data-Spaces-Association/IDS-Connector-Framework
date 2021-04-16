@@ -3,15 +3,16 @@ package de.fraunhofer.isst.ids.framework.messaging.model.filters;
 import java.util.Objects;
 
 /**
- * Result that is returned by a PreDispatchingFilter (with information about why a message was accepted or rejected)
+ * Result that is returned by a PreDispatchingFilter (with information about why a message was accepted or rejected).
  */
 public class PreDispatchingFilterResult {
+
     private final Throwable error;
     private final boolean success;
     private final String message;
 
     /**
-     * The result contains a message about its result, can contain an error if something went wrong and has a boolean flag for success
+     * The result contains a message about its result, can contain an error if something went wrong and has a boolean flag for success.
      *
      * @param error an error that occured during PreDispatchingFilter processing
      * @param success true if the predispatchingfilter successfully checked and accepted the message
@@ -33,7 +34,7 @@ public class PreDispatchingFilterResult {
     }
 
     /**
-     * Static method for a default successResult
+     * Static method for a default successResult.
      *
      * @return a PreDispatchingFilterResult where success = true, but with empty message
      */
@@ -42,7 +43,7 @@ public class PreDispatchingFilterResult {
     }
 
     /**
-     * Create a successResult with given message
+     * Create a successResult with given message.
      *
      * @param message the message of the Result
      * @return a PreDispatchingFilterResult where success = true, with given message
@@ -80,8 +81,12 @@ public class PreDispatchingFilterResult {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         final var that = (PreDispatchingFilterResult) o;
         return isSuccess() == that.isSuccess() &&
                 Objects.equals(getError(), that.getError()) &&
@@ -94,7 +99,7 @@ public class PreDispatchingFilterResult {
     }
 
     /**
-     * Builder class for PreDispatchingFilterResults
+     * Builder class for PreDispatchingFilterResults.
      */
     public static final class PreDispatchingFilterResultBuilder {
         private Throwable error;

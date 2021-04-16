@@ -1,15 +1,19 @@
 package de.fraunhofer.isst.ids.framework.messaging.model.responses;
 
-import de.fraunhofer.iais.eis.*;
-import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import de.fraunhofer.isst.ids.framework.util.IDSUtils;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import de.fraunhofer.iais.eis.DynamicAttributeTokenBuilder;
+import de.fraunhofer.iais.eis.RejectionMessage;
+import de.fraunhofer.iais.eis.RejectionMessageBuilder;
+import de.fraunhofer.iais.eis.RejectionReason;
+import de.fraunhofer.iais.eis.TokenFormat;
+import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import de.fraunhofer.isst.ids.framework.util.IDSUtils;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * An implementation of MessageResponse used for returning RejectionMessages and Error descriptions.
@@ -22,18 +26,18 @@ public class ErrorResponse implements MessageResponse {
     private final String errorMessage;
 
     /**
-     * Create an ErrorResponse with a RejectionMessage header and errorReason String payload
+     * Create an ErrorResponse with a RejectionMessage header and errorReason String payload.
      *
      * @param rejectionMessage a RejectionMessage
      * @param errorMessage a detailed Error description
      */
-    public ErrorResponse(RejectionMessage rejectionMessage, String errorMessage){
+    public ErrorResponse(final RejectionMessage rejectionMessage, final String errorMessage) {
         this.rejectionMessage = rejectionMessage;
         this.errorMessage = errorMessage;
     }
 
     /**
-     * Create an ErrorResponse with a RejectionMessage header and errorReason String payload
+     * Create an ErrorResponse with a RejectionMessage header and errorReason String payload.
      *
      * @param rejectionMessage a RejectionMessage
      * @param errorReason a detailed Error description
@@ -44,7 +48,7 @@ public class ErrorResponse implements MessageResponse {
     }
 
     /**
-     * Create an ErrorResponse with Default RejectionMessage as header (only RejectionReason has to be Provided)
+     * Create an ErrorResponse with Default RejectionMessage as header (only RejectionReason has to be Provided).
      *
      * @param rejectionReason RejectionReason (why the message was rejected)
      * @param errorMessage detailed error description
@@ -53,12 +57,16 @@ public class ErrorResponse implements MessageResponse {
      * @param messageId id of the message being rejected (from message-header)
      * @return an instance of ErrorResponse with the given parameters
      */
-    public static ErrorResponse withDefaultHeader(final RejectionReason rejectionReason, final String errorMessage, final URI connectorId, final String modelVersion, URI messageId){
-        if(messageId == null) {
+    public static ErrorResponse withDefaultHeader(final RejectionReason rejectionReason,
+                                                  final String errorMessage,
+                                                  final URI connectorId,
+                                                  final String modelVersion,
+                                                  URI messageId) {
+        if (messageId == null) {
             messageId = URI.create("https://INVALID");
         }
 
-        var rejectionMessage = new RejectionMessageBuilder()
+        final var rejectionMessage = new RejectionMessageBuilder()
                 ._securityToken_(new DynamicAttributeTokenBuilder()._tokenFormat_(TokenFormat.JWT)._tokenValue_("rejected!").build())
                 ._correlationMessage_(messageId)
                 ._senderAgent_(connectorId)
@@ -71,7 +79,7 @@ public class ErrorResponse implements MessageResponse {
     }
 
     /**
-     * Create an ErrorResponse with Default RejectionMessage as header (only RejectionReason has to be Provided)
+     * Create an ErrorResponse with Default RejectionMessage as header (only RejectionReason has to be Provided).
      *
      * @param rejectionReason RejectionReason (why the message was rejected)
      * @param errorMessage detailed error description
@@ -79,14 +87,17 @@ public class ErrorResponse implements MessageResponse {
      * @param modelVersion infomodelversion of the current connector
      * @return an instance of ErrorResponse with the given parameters
      */
-    public static ErrorResponse withDefaultHeader(final RejectionReason rejectionReason, final String errorMessage, final URI connectorId, final String modelVersion){
+    public static ErrorResponse withDefaultHeader(final RejectionReason rejectionReason,
+                                                  final String errorMessage,
+                                                  final URI connectorId,
+                                                  final String modelVersion) {
         return withDefaultHeader(rejectionReason, errorMessage, connectorId, modelVersion, null);
     }
 
     /**{@inheritDoc}*/
     @Override
-    public Map<String, Object> createMultipartMap(Serializer serializer) throws IOException {
-        var multiMap = new LinkedHashMap<String, Object>();
+    public Map<String, Object> createMultipartMap(final Serializer serializer) throws IOException {
+        final var multiMap = new LinkedHashMap<String, Object>();
         multiMap.put("header", serializer.serialize(rejectionMessage));
         multiMap.put("payload", errorMessage);
         return multiMap;

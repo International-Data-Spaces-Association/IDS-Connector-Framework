@@ -21,14 +21,14 @@ public class KeyStoreManagerTest {
      */
     @Test
     public void keyStoreLoads() throws KeyStoreManagerInitializationException {
-        var model = new ConfigurationModelBuilder()
+        final var model = new ConfigurationModelBuilder()
                 ._keyStore_(URI.create("file:///isst-testconnector.p12"))
                 ._trustStore_(URI.create("file:///isst-testconnector-truststore.jks"))
                 ._configurationModelLogLevel_(LogLevel.MINIMAL_LOGGING)
                 ._connectorDeployMode_(ConnectorDeployMode.TEST_DEPLOYMENT)
                 ._connectorStatus_(ConnectorStatus.CONNECTOR_OFFLINE)
                 .build();
-        KeyStoreManager manager = new KeyStoreManager(model, "password".toCharArray(), "password".toCharArray(), "1");
+        final var manager = new KeyStoreManager(model, "password".toCharArray(), "password".toCharArray(), "1");
         assertNotNull(manager.getPrivateKey());
         assertNotNull(manager.getCert());
         assertNotNull(manager.getTrustManager());

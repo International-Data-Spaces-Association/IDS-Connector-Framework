@@ -1,5 +1,8 @@
 package de.fraunhofer.isst.ids.framework.messaging.handling;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 import de.fraunhofer.iais.eis.Message;
 import de.fraunhofer.isst.ids.framework.messaging.model.messages.MessageHandler;
 import de.fraunhofer.isst.ids.framework.messaging.model.messages.SupportedMessageType;
@@ -9,14 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Optional;
-
 /**
- * Resolver that uses the Spring dependency injection mechanism to find the matching message handler
+ * Resolver that uses the Spring dependency injection mechanism to find the matching message handler.
  */
 @Service
 public class SpringRequestHandlerResolver implements RequestHandlerResolver {
+
+    private final ApplicationContext appContext;
 
     @Data
     @RequiredArgsConstructor
@@ -24,8 +26,6 @@ public class SpringRequestHandlerResolver implements RequestHandlerResolver {
         final K key;
         final V value;
     }
-
-    private final ApplicationContext appContext;
 
     /**
      * Default constructor autowired by Spring and sets ApplicationContext from Spring.
