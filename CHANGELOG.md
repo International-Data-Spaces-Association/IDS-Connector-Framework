@@ -30,6 +30,10 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Changed
 - IDSController now accepts messages with empty payloads
 
+## [4.0.7] - 2021-03-09
+### Changed
+- IDSController now accepts messages with empty payloads
+
 ## [4.0.6] - 2021-02-28
 ### Recommended Security Update
 - Updated used springframework dependencies
