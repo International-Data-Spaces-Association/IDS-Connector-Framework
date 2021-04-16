@@ -5,10 +5,11 @@
 <p align="center">
 <a href="https://github.com/International-Data-Spaces-Association/IDS-Connector-Framework/blob/development/LICENSE"><img src="https://img.shields.io/github/license/International-Data-Spaces-Association/IDS-Connector-Framework"></a>
 <a href="https://github.com/International-Data-Spaces-Association/IDS-Connector-Framework/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>
-<img src="https://img.shields.io/github/workflow/status/International-Data-Spaces-Association/IDS-Connector-Framework/Development-SNAPSHOT">
+<img src="https://img.shields.io/github/workflow/status/International-Data-Spaces-Association/IDS-Connector-Framework/Development-Maven-Build">
 <img src="https://img.shields.io/github/languages/code-size/International-Data-Spaces-Association/IDS-Connector-Framework">
 <img src="https://img.shields.io/github/v/release/International-Data-Spaces-Association/IDS-Connector-Framework">
 <img src="https://img.shields.io/github/contributors/International-Data-Spaces-Association/IDS-Connector-Framework">
+<img src="https://img.shields.io/badge/Dependabot-Active-green">
 </p>
 
 
@@ -40,7 +41,7 @@ It will be developed continuously to improve and simplify the development of IDS
 
 ## Prerequisites
 
-- The Framework  uses asynchronous encryption concepts and requires public and private key of the Connector instance. 
+- The Framework uses asymmetric encryption concepts and requires public and private key of the Connector instance. 
 - Furthermore, it utilizes the IDS Configurationmodel which was developed within the IDS Informationmodel. Therefor a 
 `configmodel.json` file should exist to load the configuration of the Connector into the Configurationmodel. An example of that can be seen inside the Demo Connector project. 
 The configuration file should reference the key and trust store.

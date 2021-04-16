@@ -1,9 +1,10 @@
 package de.fraunhofer.isst.ids.framework.messaging.model.messages;
 
 /**
- * An exception that is thrown during MessageHandling of a MessageHandler
+ * An exception that is thrown during MessageHandling of a MessageHandler.
  */
 public class MessageHandlingException extends Exception {
+    static final long serialVersionUID = 42L;
 
     public MessageHandlingException() {
         super();

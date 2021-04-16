@@ -1,82 +1,100 @@
 package de.fraunhofer.isst.ids.framework.communication.broker;
 
-import de.fraunhofer.iais.eis.*;
-import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import de.fraunhofer.isst.ids.framework.util.IDSUtils;
-import okhttp3.MultipartBody;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.URI;
 
+import de.fraunhofer.iais.eis.ConnectorUnavailableMessage;
+import de.fraunhofer.iais.eis.ConnectorUnavailableMessageBuilder;
+import de.fraunhofer.iais.eis.ConnectorUpdateMessage;
+import de.fraunhofer.iais.eis.ConnectorUpdateMessageBuilder;
+import de.fraunhofer.iais.eis.DynamicAttributeToken;
+import de.fraunhofer.iais.eis.QueryLanguage;
+import de.fraunhofer.iais.eis.QueryMessage;
+import de.fraunhofer.iais.eis.QueryMessageBuilder;
+import de.fraunhofer.iais.eis.QueryScope;
+import de.fraunhofer.iais.eis.QueryTarget;
+import de.fraunhofer.iais.eis.Resource;
+import de.fraunhofer.iais.eis.ResourceUnavailableMessage;
+import de.fraunhofer.iais.eis.ResourceUnavailableMessageBuilder;
+import de.fraunhofer.iais.eis.ResourceUpdateMessage;
+import de.fraunhofer.iais.eis.ResourceUpdateMessageBuilder;
+import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import de.fraunhofer.isst.ids.framework.util.IDSUtils;
+import okhttp3.MultipartBody;
+
 /**
- * The MessageUtils class contains utility methods for building Infomodel Messages (used by the {@link IDSBrokerServiceImpl} class)
+ * The MessageUtils class contains utility methods for building Infomodel Messages (used by the {@link IDSBrokerServiceImpl} class).
  */
 public class BrokerIDSMessageUtils {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BrokerIDSMessageUtils.class);
 
     private static final Serializer SERIALIZER = new Serializer();
 
     /**
-     * Create a ResourceUnavailableMessage used for unregistering the given resource at a broker
+     * Create a ResourceUnavailableMessage used for unregistering the given resource at a broker.
      *
      * @param securityToken the DAT Token used for this request
-     * @param INFO_MODEL_VERSION the Infomodel Version of the connector
+     * @param infoModelVersion the Infomodel Version of the connector
      * @param connectorID the ID of the connector
      * @param resource the resource that is marked as unavailable at the broker
      * @return the {@link ResourceUnavailableMessage} as JSONLD
      * @throws IOException when the message cannot be serialized properly
      */
-    public static String buildResourceUnavailableMessage(DynamicAttributeToken securityToken, String INFO_MODEL_VERSION, URI connectorID, Resource resource) throws IOException {
-        var msg = new ResourceUnavailableMessageBuilder()
+    public static String buildResourceUnavailableMessage(final DynamicAttributeToken securityToken,
+                                                         final String infoModelVersion,
+                                                         final URI connectorID,
+                                                         final Resource resource) throws IOException {
+        final var msg = new ResourceUnavailableMessageBuilder()
                 ._affectedResource_(resource.getId())
                 ._securityToken_(securityToken)
                 ._issued_(IDSUtils.getGregorianNow())
                 ._senderAgent_(connectorID)
                 ._issuerConnector_(connectorID)
-                ._modelVersion_(INFO_MODEL_VERSION)
+                ._modelVersion_(infoModelVersion)
                 .build();
         return SERIALIZER.serialize(msg);
     }
 
     /**
-     * Create a ResourceUpdateMessage used for registering and updating the given resource at a broker
+     * Create a ResourceUpdateMessage used for registering and updating the given resource at a broker.
      *
      * @param securityToken the DAT Token used for this request
-     * @param INFO_MODEL_VERSION the Infomodel Version of the connector
+     * @param infoModelVersion the Infomodel Version of the connector
      * @param connectorID the ID of the connector
      * @param resource the resource that is updated at the broker
      * @return the {@link ResourceUpdateMessage} as JSONLD
      * @throws IOException when the message cannot be serialized properly
      */
-    public static String buildResourceUpdateMessage(DynamicAttributeToken securityToken, String INFO_MODEL_VERSION, URI connectorID, Resource resource) throws IOException {
-        var msg = new ResourceUpdateMessageBuilder()
+    public static String buildResourceUpdateMessage(final DynamicAttributeToken securityToken,
+                                                    final String infoModelVersion,
+                                                    final URI connectorID,
+                                                    final Resource resource) throws IOException {
+        final var msg = new ResourceUpdateMessageBuilder()
                 ._affectedResource_(resource.getId())
                 ._securityToken_(securityToken)
                 ._issued_(IDSUtils.getGregorianNow())
                 ._senderAgent_(connectorID)
                 ._issuerConnector_(connectorID)
-                ._modelVersion_(INFO_MODEL_VERSION)
+                ._modelVersion_(infoModelVersion)
                 .build();
         return SERIALIZER.serialize(msg);
     }
 
     /**
-     * Create a ConnectorUnavailableMessage used for unregistering the connector at a broker
+     * Create a ConnectorUnavailableMessage used for unregistering the connector at a broker.
      *
      * @param securityToken the DAT Token used for this request
-     * @param INFO_MODEL_VERSION the Infomodel Version of the connector
+     * @param infoModelVersion the Infomodel Version of the connector
      * @param connectorID the ID of the connector
      * @return the {@link ConnectorUnavailableMessage} as JSONLD
      * @throws IOException when the message cannot be serialized properly
      */
-    public static String buildUnavailableMessage(DynamicAttributeToken securityToken, String INFO_MODEL_VERSION, URI connectorID) throws IOException {
-        var msg = new ConnectorUnavailableMessageBuilder()
+    public static String buildUnavailableMessage(final DynamicAttributeToken securityToken,
+                                                 final String infoModelVersion,
+                                                 final URI connectorID) throws IOException {
+        final var msg = new ConnectorUnavailableMessageBuilder()
                 ._securityToken_(securityToken)
                 ._issued_(IDSUtils.getGregorianNow())
-                ._modelVersion_(INFO_MODEL_VERSION)
+                ._modelVersion_(infoModelVersion)
                 ._issuerConnector_(connectorID)
                 ._senderAgent_(connectorID)
                 ._affectedConnector_(connectorID)
@@ -85,19 +103,21 @@ public class BrokerIDSMessageUtils {
     }
 
     /**
-     * Create a ConnectorUpdateMessage used for registering the connector at a broker
+     * Create a ConnectorUpdateMessage used for registering the connector at a broker.
      *
      * @param securityToken the DAT Token used for this request
-     * @param INFO_MODEL_VERSION the Infomodel Version of the connector
+     * @param infoModelVersion the Infomodel Version of the connector
      * @param connectorID the ID of the connector
      * @return the {@link ConnectorUpdateMessage} as JSONLD
      * @throws IOException when the message cannot be serialized properly
      */
-    public static String buildUpdateMessage(DynamicAttributeToken securityToken, String INFO_MODEL_VERSION, URI connectorID) throws IOException {
-        var msg = new ConnectorUpdateMessageBuilder()
+    public static String buildUpdateMessage(final DynamicAttributeToken securityToken,
+                                            final String infoModelVersion,
+                                            final URI connectorID) throws IOException {
+        final var msg = new ConnectorUpdateMessageBuilder()
                 ._securityToken_(securityToken)
                 ._issued_(IDSUtils.getGregorianNow())
-                ._modelVersion_(INFO_MODEL_VERSION)
+                ._modelVersion_(infoModelVersion)
                 ._issuerConnector_(connectorID)
                 ._senderAgent_(connectorID)
                 ._affectedConnector_(connectorID)
@@ -106,10 +126,10 @@ public class BrokerIDSMessageUtils {
     }
 
     /**
-     * Create a QueryMessage used for querying the broker
+     * Create a QueryMessage used for querying the broker.
      *
      * @param securityToken the DAT Token used for this request
-     * @param INFO_MODEL_VERSION the Infomodel Version of the connector
+     * @param infoModelVersion the Infomodel Version of the connector
      * @param connectorID the ID of the connector
      * @param queryLanguage the Language of the Query (e.g. SPARQL, SQL, XQUERY)
      * @param queryScope the Scope of the Query (ALL connectors, ACTIVE connectors, INACTIVE connectors) {@link QueryScope}
@@ -117,11 +137,16 @@ public class BrokerIDSMessageUtils {
      * @return the {@link QueryMessage} as JSONLD
      * @throws IOException when the message cannot be serialized properly
      */
-    public static String buildQueryMessage(DynamicAttributeToken securityToken, String INFO_MODEL_VERSION, URI connectorID, QueryLanguage queryLanguage, QueryScope queryScope, QueryTarget queryTarget) throws IOException {
-        var msg = new QueryMessageBuilder()
+    public static String buildQueryMessage(final DynamicAttributeToken securityToken,
+                                           final String infoModelVersion,
+                                           final URI connectorID,
+                                           final QueryLanguage queryLanguage,
+                                           final QueryScope queryScope,
+                                           final QueryTarget queryTarget) throws IOException {
+        final var msg = new QueryMessageBuilder()
                 ._securityToken_(securityToken)
                 ._issued_(IDSUtils.getGregorianNow())
-                ._modelVersion_(INFO_MODEL_VERSION)
+                ._modelVersion_(infoModelVersion)
                 ._issuerConnector_(connectorID)
                 ._senderAgent_(connectorID)
                 ._queryLanguage_(queryLanguage)
@@ -139,8 +164,8 @@ public class BrokerIDSMessageUtils {
      * @param selfDeclaration String representation of the connector self declaration
      * @return Two part multipart message containing the message header and self declaration as body
      */
-    public static MultipartBody buildRequestBody(String header, String selfDeclaration) {
-        var builder = new MultipartBody.Builder();
+    public static MultipartBody buildRequestBody(final String header, final String selfDeclaration) {
+        final var builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         builder.addFormDataPart("header", header);
         builder.addFormDataPart("payload", selfDeclaration);

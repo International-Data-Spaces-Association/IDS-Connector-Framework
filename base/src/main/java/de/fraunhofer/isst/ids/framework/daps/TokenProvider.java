@@ -1,33 +1,29 @@
 package de.fraunhofer.isst.ids.framework.daps;
 
+import java.io.IOException;
+import java.security.Key;
+import java.util.Objects;
+
 import de.fraunhofer.iais.eis.DynamicAttributeToken;
 import de.fraunhofer.iais.eis.DynamicAttributeTokenBuilder;
 import de.fraunhofer.iais.eis.TokenFormat;
 import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.util.ClientProvider;
-import okhttp3.OkHttpClient;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;
-import okhttp3.Response;
-import org.jose4j.jwk.JsonWebKey;
 import org.jose4j.jwk.JsonWebKeySet;
 import org.jose4j.lang.JoseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.security.Key;
 
 /**
  * Get Daps Tokens and Daps Public Key from specified URLs.
  * Spring Component Wrapper for TokenManagerService
  */
+@Slf4j
 @Service
 public class TokenProvider implements DapsTokenProvider, DapsPublicKeyProvider {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TokenProvider.class);
 
     private ConfigurationContainer configurationContainer;
     private ClientProvider clientProvider;
@@ -49,13 +45,14 @@ public class TokenProvider implements DapsTokenProvider, DapsPublicKeyProvider {
      * @param clientProvider the {@link ClientProvider} providing HttpClients using the current connector configuration
      */
     @Autowired
-    public TokenProvider(ConfigurationContainer configurationContainer, ClientProvider clientProvider) {
+    public TokenProvider(final ConfigurationContainer configurationContainer,
+                         final ClientProvider clientProvider) {
         this.configurationContainer = configurationContainer;
         this.clientProvider = clientProvider;
     }
 
     /**
-     * Return the DAT as a Infomodel {@link DynamicAttributeToken}
+     * Return the DAT as a Infomodel {@link DynamicAttributeToken}.
      *
      * @return acquire a new DAPS Token and return it as a {@link DynamicAttributeToken}
      */
@@ -68,59 +65,59 @@ public class TokenProvider implements DapsTokenProvider, DapsPublicKeyProvider {
     }
 
     /**
-     * Return the DAT as JWT String
+     * Return the DAT as JWT String.
      *
      * @return acquire a new DAPS Token and return the JWT String value
      */
     @Override
     public String provideDapsToken() {
-        LOGGER.debug(String.format("Get a new DAT Token from %s", dapsUrl));
+        log.debug(String.format("Get a new DAT Token from %s", dapsUrl));
         return TokenManagerService.acquireToken(configurationContainer, clientProvider, dapsUrl);
     }
 
     /**
-     * Return the Public Key from the DAPS JWKS
+     * Return the Public Key from the DAPS JWKS.
      *
      * @return the Public Key from the DAPS (used for validating Tokens of incoming Messages)
      */
     @Override
     public Key providePublicKey() {
         if (publicKey == null) {
-            LOGGER.debug(String.format("Getting public key from %s!", dapsKeyUrl));
+            log.debug(String.format("Getting public key from %s!", dapsKeyUrl));
             getPublicKey();
         }
-        LOGGER.debug("Provide public key!");
+        log.debug("Provide public key!");
         return publicKey;
     }
 
     /**
-     * Pull the Public Key from the DAPS and save it in the publicKey variable
+     * Pull the Public Key from the DAPS and save it in the publicKey variable.
      */
     private void getPublicKey() {
         try {
             //request the jwks
-            LOGGER.debug(String.format("Getting json web keyset from %s", dapsKeyUrl));
-            OkHttpClient client = clientProvider.getClient();
-            Request request = new Request.Builder()
+            log.debug(String.format("Getting json web keyset from %s", dapsKeyUrl));
+            final var client = clientProvider.getClient();
+            final var request = new Request.Builder()
                     .url(dapsKeyUrl)
                     .build();
-            Response response = client.newCall(request).execute();
-            String keySetJSON = response.body().string();
+            final var response = client.newCall(request).execute();
+            final var keySetJSON = Objects.requireNonNull(response.body()).string();
 
             //parse response as JsonWebKeySet
-            JsonWebKeySet jsonWebKeySet = new JsonWebKeySet(keySetJSON);
-            JsonWebKey key = jsonWebKeySet.getJsonWebKeys().stream().filter(k -> k.getKeyId().equals(keyKid)).findAny().orElse(null);
-            if(key != null){
+            final var jsonWebKeySet = new JsonWebKeySet(keySetJSON);
+            final var key = jsonWebKeySet.getJsonWebKeys().stream().filter(k -> k.getKeyId().equals(keyKid)).findAny().orElse(null);
+            if (key != null){
                 this.publicKey = key.getKey();
-            }else{
-                LOGGER.warn(String.format("Could not get JsonWebKey with kid %s from received KeySet! PublicKey is null!", keyKid));
+            } else {
+                log.warn(String.format("Could not get JsonWebKey with kid %s from received KeySet! PublicKey is null!", keyKid));
             }
         } catch (IOException e) {
-            LOGGER.warn(String.format("Could not get key from %s!", dapsKeyUrl));
-            LOGGER.warn(e.getMessage(), e);
+            log.warn(String.format("Could not get key from %s!", dapsKeyUrl));
+            log.warn(e.getMessage(), e);
         } catch (JoseException e) {
-            LOGGER.warn("Could not create JsonWebKeySet from response!");
-            LOGGER.warn(e.getMessage(), e);
+            log.warn("Could not create JsonWebKeySet from response!");
+            log.warn(e.getMessage(), e);
         }
     }
 }

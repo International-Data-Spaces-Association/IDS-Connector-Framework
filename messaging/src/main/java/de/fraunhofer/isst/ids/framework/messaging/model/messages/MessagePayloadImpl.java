@@ -1,14 +1,14 @@
 package de.fraunhofer.isst.ids.framework.messaging.model.messages;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Implementation of {@link MessagePayload} interface. Can parse payload from JSON and return the resulting inputstream.
  */
-public class MessagePayloadImpl implements MessagePayload{
+public class MessagePayloadImpl implements MessagePayload {
 
     private final InputStream underlyingInputStream;
     private final ObjectMapper objectMapper;

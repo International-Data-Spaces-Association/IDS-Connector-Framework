@@ -1,3 +1,12 @@
+```
+  _____  _____    _____         ______                                                   _    
+ |_   _||  __ \  / ____|       |  ____|                                                 | |   
+   | |  | |  | || (___  ______ | |__  _ __  __ _  _ __ ___    ___ __      __ ___   _ __ | | __
+   | |  | |  | | \___ \|______||  __|| '__|/ _` || '_ ` _ \  / _ \\ \ /\ / // _ \ | '__|| |/ /
+  _| |_ | |__| | ____) |       | |   | |  | (_| || | | | | ||  __/ \ V  V /| (_) || |   |   < 
+ |_____||_____/ |_____/        |_|   |_|   \__,_||_| |_| |_| \___|  \_/\_/  \___/ |_|   |_|\_\
+```
+
 # Changelog
 All notable changes to this project will be documented in this file.
 
@@ -6,13 +15,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
 
-## [Unreleased]
-### Added
+## [5.0.0] - UNRELEASED
+### Major Changes
+- Update Infomodel dependency to 4.0.5 - May lead to necessary adjustments to the connector source code, depending on the connector implementation. One use case is known.
+- Removed ConfigManager Module: Was not fully implemented, does not belong in an official release.
+
+### Changes
+- Patch Change: Code refactoring
+
+### Miscellaneous
+- Repo: Conribution-Guideline and Code-of-Conduct files
+
+## [4.0.7] - 2021-03-09
 ### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security 
+- IDSController now accepts messages with empty payloads
 
 ## [4.0.7] - 2021-03-09
 ### Changed

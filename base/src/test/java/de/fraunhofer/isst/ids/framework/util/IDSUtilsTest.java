@@ -29,14 +29,14 @@ public class IDSUtilsTest {
      */
     @Test
     public void testGetClient() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreManagerInitializationException, IOException {
-        Connector connector = new BaseConnectorBuilder()
+        final var connector = new BaseConnectorBuilder()
                 ._curator_(URI.create("https://example.com"))
                 ._inboundModelVersion_(new ArrayList<>(List.of("3.1.2-SNAPSHOT")))
                 ._maintainer_(URI.create("https://example.com"))
                 ._outboundModelVersion_("3.1.2-SNAPSHOT")
                 ._securityProfile_(SecurityProfile.BASE_SECURITY_PROFILE)
                 .build();
-        var model = new ConfigurationModelBuilder()
+        final var model = new ConfigurationModelBuilder()
                 ._keyStore_(URI.create("file:///isst-testconnector.p12"))
                 ._trustStore_(URI.create("file:///isst-testconnector-truststore.jks"))
                 ._configurationModelLogLevel_(LogLevel.MINIMAL_LOGGING)
@@ -45,9 +45,9 @@ public class IDSUtilsTest {
                 ._connectorDescription_(connector)
                 .build();
         System.out.println(new Serializer().serialize(model));
-        KeyStoreManager manager = new KeyStoreManager(model, "password".toCharArray(), "password".toCharArray(), "1");
-        var container = new ConfigurationContainer(model, manager);
-        var provider = new ClientProvider(container);
-        var client = provider.getClient();
+        final var manager = new KeyStoreManager(model, "password".toCharArray(), "password".toCharArray(), "1");
+        final var container = new ConfigurationContainer(model, manager);
+        final var provider = new ClientProvider(container);
+        final var client = provider.getClient();
     }
 }

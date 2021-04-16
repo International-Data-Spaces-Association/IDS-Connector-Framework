@@ -1,20 +1,20 @@
 package de.fraunhofer.isst.ids.framework.communication.http;
 
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
 import java.util.Map;
 
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 /**
- * Interface for Http Communication
+ * Interface for Http Communication.
  */
 public interface HttpService {
 
     /**
-     * Set the timeouts for the OkHttpClient
+     * Set the timeouts for the OkHttpClient.
      *
      * @param connectTimeout max timeout for connecting to target host (null = default values are used)
      * @param readTimeout max timeout for waiting for the target response (null = default values are used)
@@ -24,7 +24,7 @@ public interface HttpService {
     void setTimeouts(Duration connectTimeout, Duration readTimeout, Duration writeTimeout, Duration callTimeout);
 
     /**
-     * Reset client timeouts to OkHttp default values
+     * Reset client timeouts to OkHttp default values.
      */
     void removeTimeouts();
 
