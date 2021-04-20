@@ -14,8 +14,8 @@
 
 # Currently supported IDS-Framework versions
 
-- Version 5
-- Version 4
+- Version 5 - <a href="https://github.com/International-Data-Spaces-Association/IDS-Connector-Framework/blob/master/CHANGELOG.md">Changelog</a>
+- Version 4 - <a href="https://github.com/International-Data-Spaces-Association/IDS-Connector-Framework/blob/version-4-LTS/CHANGELOG.md">Changelog</a>
 
 Key difference: Version 4 of the IDS-Framework uses the Infomodel-Java-classes version 4.0.0., whereas version 5 of the IDS-Framework uses Infomodel Java classes newer than version 4.0.5, which include breaking-changes for the connector developers.
 
