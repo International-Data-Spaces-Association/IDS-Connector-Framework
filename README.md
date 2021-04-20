@@ -12,6 +12,12 @@
 <img src="https://img.shields.io/badge/Dependabot-Active-green">
 </p>
 
+# Currently supported IDS-Framework versions
+
+- Version 5
+- Version 4
+
+Key difference: Version 4 of the IDS-Framework uses the Infomodel-Java-classes version 4.0.0., whereas version 5 of the IDS-Framework uses Infomodel Java classes newer than version 4.0.5, which include breaking-changes for the connector developers.
 
 # IDS Framework
 
