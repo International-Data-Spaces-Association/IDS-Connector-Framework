@@ -56,12 +56,20 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
     @Override
     public Response removeResourceFromBroker(final String brokerURI, final Resource resource) throws IOException {
         final var securityToken = tokenProvider.getDAT();
-        log.debug("Building message header");
+
+        if (log.isDebugEnabled()) {
+            log.debug("Building message header");
+        }
+
         final var connectorID = container.getConnector().getId();
         final var header = BrokerIDSMessageUtils.buildResourceUnavailableMessage(securityToken, INFO_MODEL_VERSION, connectorID, resource);
         final var payload = SERIALIZER.serialize(resource);
         final var body = BrokerIDSMessageUtils.buildRequestBody(header, payload);
-        log.debug(String.format("Sending message to %s", brokerURI));
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Sending message to %s", brokerURI));
+        }
+
         return sendBrokerMessage(brokerURI, body);
     }
 
@@ -69,12 +77,20 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
     @Override
     public Response updateResourceAtBroker(final String brokerURI, final Resource resource) throws IOException {
         final var securityToken = tokenProvider.getDAT();
-        log.debug("Building message header");
+
+        if (log.isDebugEnabled()) {
+            log.debug("Building message header");
+        }
+
         final var connectorID = container.getConnector().getId();
         final var header = BrokerIDSMessageUtils.buildResourceUpdateMessage(securityToken, INFO_MODEL_VERSION, connectorID, resource);
         final var payload = SERIALIZER.serialize(resource);
         final var body = BrokerIDSMessageUtils.buildRequestBody(header, payload);
-        log.debug(String.format("Sending message to %s", brokerURI));
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Sending message to %s", brokerURI));
+        }
+
         return sendBrokerMessage(brokerURI, body);
     }
 
@@ -82,12 +98,20 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
     @Override
     public Response unregisterAtBroker(final String brokerURI) throws IOException {
         final var securityToken = tokenProvider.getDAT();
-        log.debug("Building message header");
+
+        if (log.isDebugEnabled()) {
+            log.debug("Building message header");
+        }
+
         final var connectorID = container.getConnector().getId();
         final var header = BrokerIDSMessageUtils.buildUnavailableMessage(securityToken, INFO_MODEL_VERSION, connectorID);
         final var payload = IDSUtils.buildSelfDeclaration(container.getConnector());
         final var body = BrokerIDSMessageUtils.buildRequestBody(header, payload);
-        log.debug(String.format("Sending message to %s", brokerURI));
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Sending message to %s", brokerURI));
+        }
+
         return sendBrokerMessage(brokerURI, body);
     }
 
@@ -95,12 +119,20 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
     @Override
     public Response updateSelfDescriptionAtBroker(final String brokerURI) throws IOException {
         final var securityToken = tokenProvider.getDAT();
-        log.debug("Building message header");
+
+        if (log.isDebugEnabled()) {
+            log.debug("Building message header");
+        }
+
         final var connectorID = container.getConnector().getId();
         final var header = BrokerIDSMessageUtils.buildUpdateMessage(securityToken, INFO_MODEL_VERSION, connectorID);
         final var payload = IDSUtils.buildSelfDeclaration(container.getConnector());
         final var body = BrokerIDSMessageUtils.buildRequestBody(header, payload);
-        log.debug(String.format("Sending message to %s", brokerURI));
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Sending message to %s", brokerURI));
+        }
+
         return sendBrokerMessage(brokerURI, body);
     }
 
@@ -115,18 +147,25 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
         final var body = BrokerIDSMessageUtils.buildRequestBody(header, payload);
 
         for (final var uri : brokerUris) {
-            log.debug(String.format("Sending message to %s", uri));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Sending message to %s", uri));
+            }
+
             clientProvider.getClient().newCall(new Request.Builder().url(uri).post(body).build()).enqueue(
                     new Callback() {
                         @Override
                         public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                            log.warn(String.format("Connection to Broker %s failed!", uri));
-                            log.warn(e.getMessage(), e);
+                            if (log.isWarnEnabled()) {
+                                log.warn(String.format("Connection to Broker %s failed!", uri));
+                                log.warn(e.getMessage(), e);
+                            }
                         }
 
                         @Override
                         public void onResponse(@NotNull Call call, @NotNull Response response) {
-                            log.info(String.format("Received response from %s", uri));
+                            if (log.isInfoEnabled()) {
+                                log.info(String.format("Received response from %s", uri));
+                            }
                             result.add(response);
                         }
                     }
@@ -143,11 +182,19 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
                                 final QueryScope queryScope,
                                 final QueryTarget queryTarget) throws IOException {
         final var securityToken = tokenProvider.getDAT();
-        log.debug("Building message header");
+
+        if (log.isDebugEnabled()) {
+            log.debug("Building message header");
+        }
+
         final var connectorID = container.getConnector().getId();
         final var header = BrokerIDSMessageUtils.buildQueryMessage(securityToken, INFO_MODEL_VERSION, connectorID, queryLanguage, queryScope, queryTarget);
         final var body = BrokerIDSMessageUtils.buildRequestBody(header, query);
-        log.debug(String.format("Sending message to %s", brokerURI));
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Sending message to %s", brokerURI));
+        }
+
         return sendBrokerMessage(brokerURI, body);
     }
 
@@ -161,9 +208,8 @@ public class IDSBrokerServiceImpl implements IDSBrokerService {
      */
     private Response sendBrokerMessage(final String brokerURI, final RequestBody requestBody) throws IOException {
         final var response = clientProvider.getClient().newCall(
-                new Request.Builder().url(brokerURI).post(requestBody).build()
-        ).execute();
-        if (!response.isSuccessful()) {
+                new Request.Builder().url(brokerURI).post(requestBody).build()).execute();
+        if (!response.isSuccessful() && log.isWarnEnabled()) {
             log.warn("Response of the Broker wasn't successful!");
         }
         return response;

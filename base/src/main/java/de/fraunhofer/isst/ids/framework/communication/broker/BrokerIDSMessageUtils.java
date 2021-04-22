@@ -20,11 +20,13 @@ import de.fraunhofer.iais.eis.ResourceUpdateMessage;
 import de.fraunhofer.iais.eis.ResourceUpdateMessageBuilder;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.isst.ids.framework.util.IDSUtils;
+import lombok.experimental.UtilityClass;
 import okhttp3.MultipartBody;
 
 /**
  * The MessageUtils class contains utility methods for building Infomodel Messages (used by the {@link IDSBrokerServiceImpl} class).
  */
+@UtilityClass
 public class BrokerIDSMessageUtils {
 
     private static final Serializer SERIALIZER = new Serializer();

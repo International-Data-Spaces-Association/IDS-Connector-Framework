@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
 
+## [?] - UNRELEASED
+
+### Changes
+- Patch Change: Code refactoring
+
 ## [5.0.0] - 2021-04-16
 ### Major Changes
 - Update Infomodel dependency to 4.0.5 - May lead to necessary adjustments to the connector source code, depending on the connector implementation. One use case is known.

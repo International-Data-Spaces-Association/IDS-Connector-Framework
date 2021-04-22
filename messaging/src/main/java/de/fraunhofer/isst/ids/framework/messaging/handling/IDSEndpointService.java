@@ -32,7 +32,9 @@ public class IDSEndpointService {
                               final RequestMappingHandlerMapping requestMappingHandlerMapping) {
         this.idsController = idsController;
         this.requestMappingHandlerMapping = requestMappingHandlerMapping;
-        log.debug("Adding default mappings");
+        if (log.isDebugEnabled()) {
+            log.debug("Adding default mappings");
+        }
         addMapping("/api/ids/data");
         addMapping("/api/ids/infrastructure");
     }
@@ -43,13 +45,18 @@ public class IDSEndpointService {
      * @param url the url for which a route to {@link IDSController} should be added
      */
     public void addMapping(final String url) {
-        log.debug(String.format("Adding a mapping for url %s", url));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Adding a mapping for url %s", url));
+        }
+
         final var requestMappingInfo = getRequestMappingInfo(url);
         try {
             requestMappingHandlerMapping.registerMapping(requestMappingInfo, idsController, IDSController.class.getDeclaredMethod("handleIDSMessage", HttpServletRequest.class));
         } catch (NoSuchMethodException e) {
             //cannot happen, method exists
-            log.error("IDSController could not be found for mapping route!");
+            if (log.isErrorEnabled()) {
+                log.error("IDSController could not be found for mapping route!");
+            }
         }
     }
 
@@ -59,12 +66,13 @@ public class IDSEndpointService {
      * @param url the url for which the {@link IDSController} should be unmapped for (RequestMappingInfo is deleted)
      */
     public void removeMapping(final String url) {
-        log.debug(String.format("Remove mapping for url %s", url));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Remove mapping for url %s", url));
+        }
         final var requestMappingInfo = getRequestMappingInfo(url);
         requestMappingHandlerMapping.unregisterMapping(requestMappingInfo);
     }
 
-    @NotNull
     private RequestMappingInfo getRequestMappingInfo(final String url) {
         return RequestMappingInfo
                 .paths(url)
