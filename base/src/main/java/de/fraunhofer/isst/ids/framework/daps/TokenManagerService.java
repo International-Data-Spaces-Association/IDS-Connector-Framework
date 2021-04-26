@@ -205,7 +205,7 @@ public class TokenManagerService {
      */
     public static String[] split(final String src, final int n) {
         var result = new String[(int) Math.ceil((double) src.length() / (double) n)];
-        for (int i = 0; i < result.length; i++) {
+        for (var i = 0; i < result.length; i++) {
             result[i] = src.substring(i * n, Math.min(src.length(), (i + 1) * n));
         }
         return result;

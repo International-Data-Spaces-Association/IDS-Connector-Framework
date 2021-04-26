@@ -74,7 +74,7 @@ public class IDSController {
             if (log.isDebugEnabled()) {
                 log.debug("parsing header of incoming message");
             }
-            try (Scanner scanner = new Scanner(headerPart.getInputStream(), StandardCharsets.UTF_8.name())) {
+            try (var scanner = new Scanner(headerPart.getInputStream(), StandardCharsets.UTF_8.name())) {
                 input = scanner.useDelimiter("\\A").next();
             }
 

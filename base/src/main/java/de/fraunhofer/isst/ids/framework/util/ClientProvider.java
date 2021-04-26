@@ -160,9 +160,9 @@ public class ClientProvider {
             log.debug("Creating OkHttp client");
         }
 
-        final var builder = new OkHttpClient.Builder(); //TODO custom Timeouts?
+        final var builder = new OkHttpClient.Builder();
         final var trustManager = manager.getTrustManager();
-        final var sslContext = SSLContext.getInstance("TLS"); //TODO catch here, should never happen
+        final var sslContext = SSLContext.getInstance("TLS");
 
         sslContext.init(null, new TrustManager[]{trustManager}, null);
 

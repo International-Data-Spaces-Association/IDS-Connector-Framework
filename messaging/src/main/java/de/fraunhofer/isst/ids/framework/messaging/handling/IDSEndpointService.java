@@ -3,7 +3,6 @@ package de.fraunhofer.isst.ids.framework.messaging.handling;
 import javax.servlet.http.HttpServletRequest;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;

@@ -170,7 +170,7 @@ public class KeyStoreManager {
                 log.info("Loading KeyStore from ClassPath...");
             }
 
-            final InputStream is = new ClassPathResource(pathString).getInputStream();
+            final var is = new ClassPathResource(pathString).getInputStream();
 
             try {
                 store.load(is, pw);
