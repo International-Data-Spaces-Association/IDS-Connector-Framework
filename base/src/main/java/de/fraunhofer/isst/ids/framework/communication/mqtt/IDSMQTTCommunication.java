@@ -77,12 +77,15 @@ public class IDSMQTTCommunication {
             return true;
 
         } catch (MqttException e) {
-            log.error(
-                    "Error on MQTT Communication" + "\n"
-                            + "reason: " + e.getReasonCode() + "\n"
-                            + "message: " + e.getMessage() + "\n"
-                            + "loc: " + e.getLocalizedMessage() + "\n"
-                            + "cause: " + e.getCause() + "\n", e);
+            if (log.isErrorEnabled()) {
+                log.error(
+                        "Error on MQTT Communication" + "\n"
+                        + "reason: " + e.getReasonCode() + "\n"
+                        + "message: " + e.getMessage() + "\n"
+                        + "loc: " + e.getLocalizedMessage() + "\n"
+                        + "cause: " + e.getCause() + "\n", e);
+            }
+
             return false;
         }
     }
@@ -115,12 +118,15 @@ public class IDSMQTTCommunication {
 
             return true;
         } catch (MqttException e) {
-            log.error(
-                    "Error on MQTT Communication" + "\n"
-                            + "reason: " + e.getReasonCode() + "\n"
-                            + "message: " + e.getMessage() + "\n"
-                            + "loc: " + e.getLocalizedMessage() + "\n"
-                            + "cause: " + e.getCause() + "\n", e);
+            if (log.isErrorEnabled()) {
+                log.error(
+                        "Error on MQTT Communication" + "\n"
+                        + "reason: " + e.getReasonCode() + "\n"
+                        + "message: " + e.getMessage() + "\n"
+                        + "loc: " + e.getLocalizedMessage() + "\n"
+                        + "cause: " + e.getCause() + "\n", e);
+            }
+
             return false;
         }
     }

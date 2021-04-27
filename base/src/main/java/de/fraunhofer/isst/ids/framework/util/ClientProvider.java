@@ -23,7 +23,7 @@ import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 
 /**
- * The ClientProvider uses the {@link ConfigurationContainer} to rebuild clients, when a new configurationContainer is created
+ * The ClientProvider uses the {@link ConfigurationContainer} to rebuild clients, when a new configurationContainer is created.
  */
 @Slf4j
 public class ClientProvider {
@@ -32,7 +32,7 @@ public class ClientProvider {
     private OkHttpClient client;
 
     /**
-     * Constructor, creating a Client provider using the KeyStore part from the ConfigurationContainer
+     * Constructor, creating a Client provider using the KeyStore part from the ConfigurationContainer.
      *
      * @param configContainer the {@link ConfigurationContainer} managing current configurations
      * @throws NoSuchAlgorithmException if the cryptographic is unknown when building an {@link OkHttpClient}
@@ -44,16 +44,16 @@ public class ClientProvider {
     }
 
     /**
-     * Getter for the current OkHttpClient
+     * Getter for the current OkHttpClient.
      *
      * @return the OkHttpClient using the current configuration
      */
-    public OkHttpClient getClient(){
+    public OkHttpClient getClient() {
         return client;
     }
 
     /**
-     * recreate the client builder with a new config (can be called when the configurationmodel or truststore changes)
+     * recreate the client builder with a new config (can be called when the configurationmodel or truststore changes).
      *
      * @throws NoSuchAlgorithmException if the cryptographic is unknown when building an {@link OkHttpClient}
      * @throws KeyManagementException   if there is an error with any configured key when building an {@link OkHttpClient}
@@ -63,7 +63,7 @@ public class ClientProvider {
     }
 
     /**
-     * Request a client with custom timeouts, set a value to set timeout, set null to ignore and use the default value for this timeout
+     * Request a client with custom timeouts, set a value to set timeout, set null to ignore and use the default value for this timeout.
      *
      * @param connectTimeout max timeout for connecting to target host (null = default values are used)
      * @param readTimeout max timeout for waiting for the target response (null = default values are used)
@@ -75,14 +75,21 @@ public class ClientProvider {
                                               final Duration readTimeout,
                                               final Duration writeTimeout,
                                               final Duration callTimeout) {
-        log.debug("Creating OkHttp client");
+        if (log.isDebugEnabled()) {
+            log.debug("Creating OkHttp client");
+        }
+
         final var withTimeout = rebuildClientWithTimeouts(client, connectTimeout, readTimeout, writeTimeout, callTimeout);
-        log.info("Ok Http Client Protocols" + withTimeout.protocols());
+
+        if (log.isInfoEnabled()) {
+            log.info("Ok Http Client Protocols" + withTimeout.protocols());
+        }
+
         return withTimeout;
     }
 
     /**
-     * Set custom timeouts for the OkHttpClient and build one
+     * Set custom timeouts for the OkHttpClient and build one.
      *
      * @param client the client which is rebuilt with
      * @param connectTimeout max timeout for connecting to target host (null = default values are used)
@@ -95,33 +102,49 @@ public class ClientProvider {
                                                    final Duration connectTimeout,
                                                    final Duration readTimeout,
                                                    final Duration writeTimeout,
-                                                   final Duration callTimeout){
+                                                   final Duration callTimeout) {
         final var builder = client.newBuilder();
-        if(connectTimeout != null){
-            log.debug(String.format("Setting connect timeout: %s ", connectTimeout.toString()));
+        if (connectTimeout != null) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Setting connect timeout: %s ", connectTimeout.toString()));
+            }
             builder.connectTimeout(connectTimeout);
         }
-        if(readTimeout != null){
-            log.debug(String.format("Setting read timeout: %s ", readTimeout.toString()));
+        if (readTimeout != null) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Setting read timeout: %s ", readTimeout.toString()));
+            }
             builder.readTimeout(readTimeout);
         }
-        if(writeTimeout != null){
-            log.debug(String.format("Setting write timeout: %s ", writeTimeout.toString()));
+        if (writeTimeout != null) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Setting write timeout: %s ", writeTimeout.toString()));
+            }
             builder.writeTimeout(writeTimeout);
         }
-        if(callTimeout != null){
-            log.debug(String.format("Setting call timeout: %s ", callTimeout.toString()));
+        if (callTimeout != null) {
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Setting call timeout: %s ", callTimeout.toString()));
+            }
             builder.callTimeout(callTimeout);
         }
-        log.debug("Building client!");
+
+        if (log.isDebugEnabled()) {
+            log.debug("Building client!");
+        }
+
         final var okHttpClient = builder.build();
-        log.info("Ok Http Client Protocols" + okHttpClient.protocols());
+
+        if (log.isInfoEnabled()) {
+            log.info("Ok Http Client Protocols" + okHttpClient.protocols());
+        }
+
         return okHttpClient;
     }
 
 
     /**
-     * Create the client builder, which can be used to build the OkHttpClient directly, or to customize timeouts for the client
+     * Create the client builder, which can be used to build the OkHttpClient directly, or to customize timeouts for the client.
      *
      * @param connector the current connector configuration
      * @param manager the current key- and truststore
@@ -133,25 +156,37 @@ public class ClientProvider {
                                                             final KeyStoreManager manager)
             throws NoSuchAlgorithmException, KeyManagementException {
 
-        log.debug("Creating OkHttp client");
-        final var builder = new OkHttpClient.Builder(); //TODO custom Timeouts?
+        if (log.isDebugEnabled()) {
+            log.debug("Creating OkHttp client");
+        }
 
+        final var builder = new OkHttpClient.Builder();
         final var trustManager = manager.getTrustManager();
-        final var sslContext = SSLContext.getInstance("TLS"); //TODO catch here, should never happen
+        final var sslContext = SSLContext.getInstance("TLS");
+
         sslContext.init(null, new TrustManager[]{trustManager}, null);
+
         final var sslSocketFactory = sslContext.getSocketFactory();
+
         builder.sslSocketFactory(sslSocketFactory, trustManager);
-        log.debug("Created SSLSocketFactory");
+
+        if (log.isDebugEnabled()) {
+            log.debug("Created SSLSocketFactory");
+        }
 
         //if the connector has a proxy set
-        if(connector.getConnectorProxy() != null) {
+        if (connector.getConnectorProxy() != null) {
             //if there is any proxy in the proxylist
             final var proxyconf = connector.getConnectorProxy().stream().findAny().orElse(null);
             if (proxyconf != null) {
-                log.debug("Proxy is set active! Configuring Proxy.");
+                if (log.isDebugEnabled()) {
+                    log.debug("Proxy is set active! Configuring Proxy.");
+                }
                 //create and set Proxy Authenticator with BasicAuth if proxy username and password are set
                 if (proxyconf.getProxyAuthentication() != null && proxyconf.getProxyAuthentication().getAuthUsername() != null && proxyconf.getProxyAuthentication().getAuthPassword() != null) {
-                    log.debug("Setting Proxy Authenticator");
+                    if (log.isDebugEnabled()) {
+                        log.debug("Setting Proxy Authenticator");
+                    }
                     final Authenticator proxyAuthenticator = (route, response) -> {
                         String credential = Credentials.basic(proxyconf.getProxyAuthentication().getAuthUsername(), proxyconf.getProxyAuthentication().getAuthPassword());
                         return response.request().newBuilder()
@@ -159,35 +194,49 @@ public class ClientProvider {
                                 .build();
                     };
                     builder.proxyAuthenticator(proxyAuthenticator);
-                }else{
-                    log.debug("No Proxy Authentication credentials are set!");
+                } else {
+                    if (log.isDebugEnabled()) {
+                        log.debug("No Proxy Authentication credentials are set!");
+                    }
                 }
-                log.debug("Create a ProxySelector");
+
+                if (log.isDebugEnabled()) {
+                    log.debug("Create a ProxySelector");
+                }
+
                 //create a custom proxySelector (will select the proxy when request goes to host not in NO_PROXY list, and NO_PROXY otherwise)
                 final ProxySelector proxySelector = new ProxySelector() {
                     @Override
-                    public List<Proxy> select(URI uri) {
+                    public List<Proxy> select(final URI uri) {
                         //create a List of size 1 containing the possible Proxy
                         final List<Proxy> proxyList = new ArrayList<>(1);
                         if (proxyconf.getNoProxy().contains(uri)) {
-                            log.debug(String.format("URI %s is in NoProxy List, no proxy is used", uri.toString()));
+                            if (log.isDebugEnabled()) {
+                                log.debug(String.format("URI %s is in NoProxy List, no proxy is used", uri.toString()));
+                            }
                             //if the called uri is in the Exceptions of the Connectors ProxyConfiguration use no proxy
                             proxyList.add(Proxy.NO_PROXY);
                         } else {
-                            log.debug(String.format("URI %s is not in NoProxy List, use configured Proxy", uri.toString()));
+                            if (log.isDebugEnabled()) {
+                                log.debug(String.format("URI %s is not in NoProxy List, use configured Proxy", uri.toString()));
+                            }
                             //else use proxy with ProxyConfig
                             //TODO get Proxy from URI
                             var proxyAddress = proxyconf.getProxyURI();
                             var proxyHost = proxyAddress.getHost();
                             int proxyPort = proxyAddress.getPort();
-                            log.info("Address: " + proxyHost + " ,Port: " + proxyPort);
+
+                            if (log.isInfoEnabled()) {
+                                log.info("Address: " + proxyHost + " ,Port: " + proxyPort);
+                            }
+
                             proxyList.add(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
                         }
                         return proxyList;
                     }
 
                     @Override
-                    public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+                    public void connectFailed(final URI uri, final SocketAddress sa, final IOException ioe) {
                         throw new UnsupportedOperationException("The selected Proxy is unavailable!");
                     }
                 };

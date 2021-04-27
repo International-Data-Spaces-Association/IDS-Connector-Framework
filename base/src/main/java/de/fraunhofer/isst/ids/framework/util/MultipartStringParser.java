@@ -3,11 +3,9 @@ package de.fraunhofer.isst.ids.framework.util;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadException;
@@ -21,18 +19,7 @@ public class MultipartStringParser implements UploadContext {
 
     private String postBody;
     private String boundary;
-    private Map<String, String> parameters = new HashMap<String, String>();
-
-    /**
-     * Convert a String from a multipart response to a Map with Partname/MessagePart.
-     *
-     * @param postBody a multipart response body as string
-     * @return a Map from partname on content
-     * @throws FileUploadException if there are problems reading/parsing the postBody.
-     */
-    public static Map<String, String> stringToMultipart(final String postBody) throws FileUploadException {
-        return new MultipartStringParser(postBody).getParameters();
-    }
+    private Map<String, String> parameters = new ConcurrentHashMap<>();
 
     /**
      * Constructor for the MultipartStringParser used internally to parse a multipart response to a Map<Partname, MessagePart>.
@@ -54,6 +41,17 @@ public class MultipartStringParser implements UploadContext {
                 parameters.put(fileItem.getFieldName(), fileItem.getString());
             } // else it is an uploaded file
         }
+    }
+
+    /**
+     * Convert a String from a multipart response to a Map with Partname/MessagePart.
+     *
+     * @param postBody a multipart response body as string
+     * @return a Map from partname on content
+     * @throws FileUploadException if there are problems reading/parsing the postBody.
+     */
+    public static Map<String, String> stringToMultipart(final String postBody) throws FileUploadException {
+        return new MultipartStringParser(postBody).getParameters();
     }
 
     /**

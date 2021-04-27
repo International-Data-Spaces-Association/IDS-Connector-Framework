@@ -58,7 +58,7 @@ public class ConfigurationContainer {
     }
 
     /**
-     * Getter for the {@link KeyStoreManager}
+     * Getter for the {@link KeyStoreManager}.
      *
      * @return the keymanager for Key- and Truststore defined by the ConfigurationModel.
      */
@@ -75,9 +75,16 @@ public class ConfigurationContainer {
      */
     public void updateConfiguration(final ConfigurationModel configurationModel) throws ConfigurationUpdateException {
         try {
-            log.debug("Updating the current configuration");
+            if (log.isDebugEnabled()) {
+                log.debug("Updating the current configuration");
+            }
+
             final var manager = rebuildKeyStoreManager(configurationModel);
-            log.debug("KeyStoreManager rebuilt");
+
+            if (log.isDebugEnabled()) {
+                log.debug("KeyStoreManager rebuilt");
+            }
+
             this.configurationModel = configurationModel;
             this.keyStoreManager = manager;
             if (clientProvider != null) {
@@ -85,11 +92,15 @@ public class ConfigurationContainer {
                 log.debug("ClientProvider updated!");
             }
         } catch (KeyStoreManagerInitializationException e) {
-            log.error("Configuration could not be updated! Keeping old configuration!");
+            if (log.isErrorEnabled()) {
+                log.error("Configuration could not be updated! Keeping old configuration!");
+            }
             throw new ConfigurationUpdateException(e.getMessage(), e.getCause());
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            log.error("New Key- or Truststore could not be initialized! Keeping old configuration!");
-            log.error(e.getMessage(), e);
+            if (log.isErrorEnabled()) {
+                log.error("New Key- or Truststore could not be initialized! Keeping old configuration!");
+                log.error(e.getMessage(), e);
+            }
             throw new ConfigurationUpdateException(e.getMessage(), e.getCause());
         }
     }
@@ -103,11 +114,12 @@ public class ConfigurationContainer {
      */
     private KeyStoreManager rebuildKeyStoreManager(final ConfigurationModel configurationModel)
             throws KeyStoreManagerInitializationException {
-        log.debug("Creating a new KeyStoreManager using current configuration");
+        if (log.isDebugEnabled()) {
+            log.debug("Creating a new KeyStoreManager using current configuration");
+        }
         final var keyPw = keyStoreManager.getKeyStorePw();
         final var trustPw = keyStoreManager.getTrustStorePw();
         final var alias = keyStoreManager.getKeyAlias();
         return new KeyStoreManager(configurationModel, keyPw, trustPw, alias);
     }
-
 }

@@ -20,6 +20,19 @@ public class InfomodelMessageBuilder {
     private static final Serializer SERIALIZER = new Serializer();
 
     /**
+     * Internal builder used by the static methods.
+     *
+     * @param header the header Part of the MultipartMessage (an implementation of {@link Message})
+     * @throws IOException if the given header cannot be serialized by the given serializer
+     */
+    private InfomodelMessageBuilder(final Message header) throws IOException {
+        this.builder = new MultipartBody.Builder();
+        builder.setType(MultipartBody.FORM);
+        builder.addFormDataPart("header", SERIALIZER.serialize(header));
+    }
+
+
+    /**
      * Build a MultipartMessage with {@link Message} header and {@link File} payload.
      *
      * @param header the header Part of the MultipartMessage (an implementation of {@link Message})
@@ -49,18 +62,6 @@ public class InfomodelMessageBuilder {
         final var imb = new InfomodelMessageBuilder(header);
         imb.addPayload(payload);
         return imb.getRequestBody();
-    }
-
-    /**
-     * Internal builder used by the static methods.
-     *
-     * @param header the header Part of the MultipartMessage (an implementation of {@link Message})
-     * @throws IOException if the given header cannot be serialized by the given serializer
-     */
-    private InfomodelMessageBuilder(final Message header) throws IOException {
-        this.builder = new MultipartBody.Builder();
-        builder.setType(MultipartBody.FORM);
-        builder.addFormDataPart("header", SERIALIZER.serialize(header));
     }
 
     /**

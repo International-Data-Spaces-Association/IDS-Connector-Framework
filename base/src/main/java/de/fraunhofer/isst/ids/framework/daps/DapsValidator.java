@@ -44,7 +44,10 @@ public class DapsValidator {
                     .setSigningKey(signingKey)
                     .parseClaimsJws(tokenValue);
         } catch (Exception e) {
-            log.warn("Could not parse incoming JWT/DAT!");
+            if (log.isWarnEnabled()) {
+                log.warn("Could not parse incoming JWT/DAT!");
+            }
+
             throw new ClaimsException(e.getMessage());
         }
     }
@@ -58,7 +61,9 @@ public class DapsValidator {
     public boolean checkDat(final Message message) {
         //Don't check DAT of RejectionMessages
         if (message instanceof RejectionMessageImpl) {
-            log.warn("RejectionMessage, skipping DAT check!");
+            if (log.isWarnEnabled()) {
+                log.warn("RejectionMessage, skipping DAT check!");
+            }
             return true;
         }
 
@@ -66,13 +71,17 @@ public class DapsValidator {
         try {
             claims = getClaims(message, keyProvider.providePublicKey());
         } catch (ClaimsException e) {
-            log.warn("Daps token of response could not be pased!");
+            if (log.isWarnEnabled()) {
+                log.warn("Daps token of response could not be pased!");
+            }
             return false;
         }
         try {
             return DapsVerifier.verify(claims);
         } catch (ClaimsException e) {
-            log.warn("Claims could not be verified!");
+            if (log.isWarnEnabled()) {
+                log.warn("Claims could not be verified!");
+            }
             return false;
         }
     }
@@ -89,13 +98,17 @@ public class DapsValidator {
         try {
             responseMap = MultipartStringParser.stringToMultipart(responseBody);
         } catch (FileUploadException e) {
-            log.warn("Response cannot be parsed to multipart!");
+            if (log.isWarnEnabled()) {
+                log.warn("Response cannot be parsed to multipart!");
+            }
             return false;
         }
         try {
            responseHeader = serializer.deserialize(responseMap.get("header"), Message.class);
         } catch (IOException e) {
-            log.warn("Response header cannot be deserialized to IDS Message!");
+            if (log.isWarnEnabled()) {
+                log.warn("Response header cannot be deserialized to IDS Message!");
+            }
             return false;
         }
         return checkDat(responseHeader);

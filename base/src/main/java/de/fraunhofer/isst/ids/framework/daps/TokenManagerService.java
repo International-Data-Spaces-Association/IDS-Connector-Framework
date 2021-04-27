@@ -11,6 +11,7 @@ import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.util.ClientProvider;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 import okhttp3.Request;
@@ -28,6 +29,7 @@ import static org.apache.commons.codec.binary.Hex.encodeHexString;
  * @author Gerd Brost (gerd.brost@aisec.fraunhofer.de)
  */
 @Slf4j
+@UtilityClass
 public class TokenManagerService {
     /**
      * Get the DAT from the DAPS at dapsURL using the current configuration.
@@ -86,13 +88,16 @@ public class TokenManagerService {
 
             final var connectorUUID = skiResult + "keyid:" + akiResult.substring(0, akiResult.length() - 1);
 
-            log.info("ConnectorUUID: " + connectorUUID);
-            log.info("Retrieving Dynamic Attribute Token...");
-
+            if (log.isInfoEnabled()) {
+                log.info("ConnectorUUID: " + connectorUUID);
+                log.info("Retrieving Dynamic Attribute Token...");
+            }
 
             // create signed JWT (JWS)
             // Create expiry date one day (86400 seconds) from now
-            log.debug("Building jwt token");
+            if (log.isDebugEnabled()) {
+                log.debug("Building jwt token");
+            }
 
             final var expiryDate = Date.from(Instant.now().plusSeconds(86_400));
             final var jwtb =
@@ -106,11 +111,15 @@ public class TokenManagerService {
                             .setAudience(targetAudience)
                             .setNotBefore(Date.from(Instant.now().minusSeconds(10)));
 
-            log.debug("Signing jwt token");
+            if (log.isDebugEnabled()) {
+                log.debug("Signing jwt token");
+            }
 
             final var jws = jwtb.signWith(SignatureAlgorithm.RS256, privKey).compact();
 
-            log.info("Request token: " + jws);
+            if (log.isInfoEnabled()) {
+                log.info("Request token: " + jws);
+            }
 
             // build form body to embed client assertion into post request
             final var formBody =
@@ -121,16 +130,24 @@ public class TokenManagerService {
                             .add("scope", "idsc:IDS_CONNECTOR_ATTRIBUTES_ALL")
                             .build();
 
-            log.debug("Getting idsutils client");
+            if (log.isDebugEnabled()) {
+                log.debug("Getting idsutils client");
+            }
 
             final var client = provider.getClient();
             final var request = new Request.Builder().url(dapsUrl + "/v2/token").post(formBody).build();
 
-            log.debug(String.format("Sending request to %s", dapsUrl + "/v2/token"));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Sending request to %s", dapsUrl + "/v2/token"));
+            }
+
             final var jwtResponse = client.newCall(request).execute();
 
             if (!jwtResponse.isSuccessful()) {
-                log.debug("DAPS request was not successful");
+                if (log.isDebugEnabled()) {
+                    log.debug("DAPS request was not successful");
+                }
+
                 throw new IOException("Unexpected code " + jwtResponse);
             }
 
@@ -141,18 +158,28 @@ public class TokenManagerService {
             }
             final var jwtString = responseBody.string();
 
-            log.info("Response body of token request:\n{}", jwtString);
+            if (log.isInfoEnabled()) {
+                log.info("Response body of token request:\n{}", jwtString);
+            }
 
             final var jsonObject = new JSONObject(jwtString);
             dynamicAttributeToken = jsonObject.getString("access_token");
 
-            log.info("Dynamic Attribute Token: " + dynamicAttributeToken);
+            if (log.isInfoEnabled()) {
+                log.info("Dynamic Attribute Token: " + dynamicAttributeToken);
+            }
         } catch (IOException e) {
-            log.error(String.format("Error retrieving token: %s", e.getMessage()));
+            if (log.isErrorEnabled()) {
+                log.error(String.format("Error retrieving token: %s", e.getMessage()));
+            }
         } catch (EmptyDapsResponseException e) {
-            log.error(String.format("Something else went wrong: %s", e.getMessage()));
+            if (log.isErrorEnabled()) {
+                log.error(String.format("Something else went wrong: %s", e.getMessage()));
+            }
         } catch (MissingCertExtensionException e) {
-            log.error("Certificate of the Connector is missing aki/ski extensions!");
+            if (log.isErrorEnabled()) {
+                log.error("Certificate of the Connector is missing aki/ski extensions!");
+            }
         }
         return dynamicAttributeToken;
     }
@@ -178,7 +205,7 @@ public class TokenManagerService {
      */
     public static String[] split(final String src, final int n) {
         var result = new String[(int) Math.ceil((double) src.length() / (double) n)];
-        for (int i = 0; i < result.length; i++) {
+        for (var i = 0; i < result.length; i++) {
             result[i] = src.substring(i * n, Math.min(src.length(), (i + 1) * n));
         }
         return result;

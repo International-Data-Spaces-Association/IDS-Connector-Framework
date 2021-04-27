@@ -45,6 +45,7 @@ public class SpringRequestHandlerResolver implements RequestHandlerResolver {
      * @return optionally found matching handler instance
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <R extends Message> Optional<MessageHandler<R>> resolveHandler(final Class<R> messageType) {
         //TODO: check if still one handler can support multiple message tpyes (SupportedMessageType)
         return Arrays.stream(appContext.getBeanNamesForAnnotation(SupportedMessageType.class))

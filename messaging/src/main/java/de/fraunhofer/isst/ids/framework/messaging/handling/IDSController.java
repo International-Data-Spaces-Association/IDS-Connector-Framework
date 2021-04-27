@@ -64,42 +64,56 @@ public class IDSController {
             final var payloadPart = request.getPart(PAYLOAD_MULTIPART_NAME);
 
             if (headerPart == null) {
-                log.debug("header or payload of incoming message were empty!");
+                if (log.isDebugEnabled()) {
+                    log.debug("header or payload of incoming message were empty!");
+                }
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createDefaultErrorMessage(RejectionReason.MALFORMED_MESSAGE, "Header was missing!"));
             }
 
             String input;
-            log.debug("parsing header of incoming message");
-            try (Scanner scanner = new Scanner(headerPart.getInputStream(), StandardCharsets.UTF_8.name())) {
+            if (log.isDebugEnabled()) {
+                log.debug("parsing header of incoming message");
+            }
+            try (var scanner = new Scanner(headerPart.getInputStream(), StandardCharsets.UTF_8.name())) {
                 input = scanner.useDelimiter("\\A").next();
             }
 
             // Deserialize JSON-LD headerPart to its RequestMessage.class
             final var requestHeader = serializer.deserialize(input, Message.class);
 
-            log.debug("hand the incoming message to the message dispatcher!");
+            if (log.isDebugEnabled()) {
+                log.debug("hand the incoming message to the message dispatcher!");
+            }
             final var response = this.messageDispatcher.process(requestHeader, payloadPart == null ? null : payloadPart.getInputStream()); //pass null if payloadPart is null, else pass it as inputStream
 
             //get Response as MultiValueMap
             final var responseAsMap = createMultiValueMap(response.createMultipartMap(serializer));
 
             // return the ResponseEntity as Multipart content with created MultiValueMap
-            log.debug("sending response with status OK (200)");
+            if (log.isDebugEnabled()) {
+                log.debug("sending response with status OK (200)");
+            }
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     .body(responseAsMap);
 
         } catch (PreProcessingException e) {
-            log.error("Error during pre-processing with a PreDispatchingFilter!", e);
+            if (log.isErrorEnabled()) {
+                log.error("Error during pre-processing with a PreDispatchingFilter!", e);
+            }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createDefaultErrorMessage(RejectionReason.BAD_PARAMETERS, String.format("Error during preprocessing: %s", e.getMessage())));
         } catch (IOException e) {
-            log.warn("incoming message could not be parsed!");
-            log.warn(e.getMessage(), e);
+            if (log.isWarnEnabled()) {
+                log.warn("incoming message could not be parsed!");
+                log.warn(e.getMessage(), e);
+            }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createDefaultErrorMessage(RejectionReason.MALFORMED_MESSAGE, "Could not parse incoming message!"));
         } catch (ServletException e) {
-            log.warn("incoming request was not multipart!");
-            log.warn(e.getMessage(), e);
+            if (log.isWarnEnabled()) {
+                log.warn("incoming request was not multipart!");
+                log.warn(e.getMessage(), e);
+            }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createDefaultErrorMessage(RejectionReason.INTERNAL_RECIPIENT_ERROR, String.format("Could not read incoming request! Error: %s", e.getMessage())));
         }
     }
@@ -111,7 +125,10 @@ public class IDSController {
      * @return a MultiValueMap used as ResponseEntity for Spring
      */
     private MultiValueMap<String, Object> createMultiValueMap(final Map<String, Object> map) {
-        log.debug("Creating MultiValueMap for the response");
+        if (log.isDebugEnabled()) {
+            log.debug("Creating MultiValueMap for the response");
+        }
+
         final var multiMap = new LinkedMultiValueMap<String, Object>();
         for (final var entry : map.entrySet()) {
             multiMap.put(entry.getKey(), List.of(entry.getValue()));
@@ -141,9 +158,13 @@ public class IDSController {
             final var multiMap = new LinkedMultiValueMap<String, Object>();
             multiMap.put(HEADER_MULTIPART_NAME, List.of(serializer.serialize(rejectionMessage)));
             multiMap.put(PAYLOAD_MULTIPART_NAME, List.of(errorMessage));
+
             return multiMap;
         } catch (IOException e) {
-            log.info(e.getMessage(), e);
+            if (log.isInfoEnabled()) {
+                log.info(e.getMessage(), e);
+            }
+
             return null;
         }
     }
