@@ -133,17 +133,21 @@ public class BrokerIDSMessageUtils {
 
     /**
      * Generates a two part multipart message. First part includes the message type (register, update, unavailable) and
-     * second part contains the connector self declaration.
+     * second part contains the payload.
      *
      * @param header          String representation of the header message
-     * @param selfDeclaration String representation of the connector self declaration
+     * @param payload String representation of the payload
      * @return Two part multipart message containing the message header and self declaration as body
      */
-    public static MultipartBody buildRequestBody(String header, String selfDeclaration) {
+    public static MultipartBody buildRequestBody(String header, String payload) {
         var builder = new MultipartBody.Builder();
         builder.setType(MultipartBody.FORM);
         builder.addFormDataPart("header", header);
-        builder.addFormDataPart("payload", selfDeclaration);
+
+        if (payload != null) {
+            builder.addFormDataPart("payload", payload);
+        }
+
         return builder.build();
     }
 

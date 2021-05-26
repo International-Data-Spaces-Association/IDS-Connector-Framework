@@ -18,6 +18,9 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 ### Added
 - Repo: Conribution-Guideline and Code-of-Conduct files
 
+### Fix
+- Removed Resource-Payload in ResourceUnavailableMessage to Broker
+
 ## [4.0.7] - 2021-03-09
 ### Changed
 - IDSController now accepts messages with empty payloads
