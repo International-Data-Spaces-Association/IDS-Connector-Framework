@@ -1,3 +1,12 @@
+```
+  _____  _____    _____         ______                                                   _    
+ |_   _||  __ \  / ____|       |  ____|                                                 | |   
+   | |  | |  | || (___  ______ | |__  _ __  __ _  _ __ ___    ___ __      __ ___   _ __ | | __
+   | |  | |  | | \___ \|______||  __|| '__|/ _` || '_ ` _ \  / _ \\ \ /\ / // _ \ | '__|| |/ /
+  _| |_ | |__| | ____) |       | |   | |  | (_| || | | | | ||  __/ \ V  V /| (_) || |   |   < 
+ |_____||_____/ |_____/        |_|   |_|   \__,_||_| |_| |_| \___|  \_/\_/  \___/ |_|   |_|\_\
+```
+
 # Changelog
 All notable changes to this project will be documented in this file.
 
@@ -5,14 +14,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
-
-## [Unreleased]
-### Added
-### Changed
-### Deprecated
-### Removed
-### Fixed
-### Security 
 
 ## [4.0.8] - UNRELEASED
 ### Added
