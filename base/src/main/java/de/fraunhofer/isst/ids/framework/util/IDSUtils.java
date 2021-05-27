@@ -20,6 +20,7 @@ import java.util.Properties;
 import de.fraunhofer.iais.eis.ConfigurationModel;
 import de.fraunhofer.iais.eis.Connector;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * Necessary for IDSMessage.
  */
 @Slf4j
+@UtilityClass
 public class IDSUtils {
 
     private static final Base64.Encoder ENCODER    = Base64.getEncoder();
@@ -63,14 +65,14 @@ public class IDSUtils {
     }
 
     /**
-     * Takes generic elements and returns them as a ArrayList
+     * Takes generic elements and returns them as a ArrayList.
      *
      * @param <T> type of objects in the returned ArrayList
      * @param elements elements to be put in the list
      * @return elements as {@code ArrayList<T>}
      */
     @SafeVarargs
-    public static <T> ArrayList<T> asList(T... elements) {
+    public static <T> ArrayList<T> asList(final T... elements) {
         return new ArrayList<>(Arrays.asList(elements));
     }
 
@@ -85,13 +87,19 @@ public class IDSUtils {
      */
     public static String getProjectProperty(final String property) {
         //read /main/resources/project/properties
-        log.debug(String.format("Trying to read Property %s from pom.xml properties", property));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Trying to read Property %s from pom.xml properties", property));
+        }
+
         final var properties = new Properties();
+
         try {
             //For Classloader see https://www.mkyong.com/java/java-getresourceasstream-in-static-method/
             properties.load(Objects.requireNonNull(IDSUtils.class.getClassLoader().getResourceAsStream("project.properties")));
         } catch (IOException e) {
-            log.info(e.getMessage());
+            if (log.isInfoEnabled()) {
+                log.info(e.getMessage());
+            }
         }
 
         //get property (might be null if not correct)
@@ -109,7 +117,9 @@ public class IDSUtils {
         try {
             return DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         } catch (DatatypeConfigurationException e) {
-            log.info(e.getMessage());
+            if (log.isInfoEnabled()) {
+                log.info(e.getMessage());
+            }
         }
         return null;
     }

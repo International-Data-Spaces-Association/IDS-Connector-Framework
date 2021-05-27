@@ -42,7 +42,9 @@ public class IDSHttpServiceImpl implements IDSHttpService {
         try {
             response = httpService.send(body, target);
         } catch (IOException e) {
-            log.warn("Message could not be sent!");
+            if (log.isWarnEnabled()) {
+                log.warn("Message could not be sent!");
+            }
             throw e;
         }
         return checkDatFromResponse(response);
@@ -57,7 +59,9 @@ public class IDSHttpServiceImpl implements IDSHttpService {
         try {
             response = httpService.sendWithHeaders(body, target, headers);
         } catch (IOException e) {
-            log.warn("Message could not be sent!");
+            if (log.isWarnEnabled()) {
+                log.warn("Message could not be sent!");
+            }
             throw e;
         }
         return checkDatFromResponse(response);
@@ -76,14 +80,19 @@ public class IDSHttpServiceImpl implements IDSHttpService {
         final var ignoreDAT = configurationContainer.getConfigModel().getConnectorDeployMode() == ConnectorDeployMode.TEST_DEPLOYMENT;
         final var responseString = response.body().string();
         final var valid = ignoreDAT || dapsValidator.checkDat(responseString);
+
         if(!valid){
-            log.warn("DAT of incoming response is not valid!");
+            if (log.isWarnEnabled()) {
+                log.warn("DAT of incoming response is not valid!");
+            }
             throw new ClaimsException("DAT of incoming response is not valid!");
         }
         try {
             return MultipartStringParser.stringToMultipart(responseString);
         } catch (FileUploadException e) {
-            log.warn("Could not parse incoming response to multipart map!");
+            if (log.isWarnEnabled()) {
+                log.warn("Could not parse incoming response to multipart map!");
+            }
             throw e;
         }
     }

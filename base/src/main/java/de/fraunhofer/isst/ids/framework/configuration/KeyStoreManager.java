@@ -63,7 +63,10 @@ public class KeyStoreManager {
                            final char[] keystorePw,
                            final char[] trustStorePw,
                            final String keyAlias) throws KeyStoreManagerInitializationException {
-        log.debug("Initializing KeyStoreManager");
+        if (log.isDebugEnabled()) {
+            log.debug("Initializing KeyStoreManager");
+        }
+
         try {
             this.configurationModel = configurationModel;
             this.keyStorePw = keystorePw;
@@ -77,21 +80,31 @@ public class KeyStoreManager {
             trustManager = configureTrustStore(myManager);
             getPrivateKeyFromKeyStore(keyAlias);
         } catch (IOException e) {
-            log.error("Key- or Truststore could not be loaded!");
+            if (log.isErrorEnabled()) {
+                log.error("Key- or Truststore could not be loaded!");
+            }
             throw new KeyStoreManagerInitializationException(e.getMessage(), e.getCause());
         } catch (CertificateException e) {
-            log.error("Error while loading a Certificate!");
-            log.error(e.getMessage(), e);
+            if (log.isErrorEnabled()) {
+                log.error("Error while loading a Certificate!");
+                log.error(e.getMessage(), e);
+            }
             throw new KeyStoreManagerInitializationException(e.getMessage(), e.getCause());
         } catch (UnrecoverableKeyException e) {
-            log.error("Could not initialize Key/Truststore: password is incorrect!");
+            if (log.isErrorEnabled()) {
+                log.error("Could not initialize Key/Truststore: password is incorrect!");
+            }
             throw new KeyStoreManagerInitializationException(e.getMessage(), e.getCause());
         } catch (NoSuchAlgorithmException e) {
-            log.error(e.getMessage(), e);
+            if (log.isErrorEnabled()) {
+                log.error(e.getMessage(), e);
+            }
             throw new KeyStoreManagerInitializationException(e.getMessage(), e.getCause());
         } catch (KeyStoreException e) {
-            log.error("Initialization of Key- or Truststore failed!");
-            log.error(e.getMessage(), e);
+            if (log.isErrorEnabled()) {
+                log.error("Initialization of Key- or Truststore failed!");
+                log.error(e.getMessage(), e);
+            }
             throw new KeyStoreManagerInitializationException(e.getMessage(), e.getCause());
         }
     }
@@ -109,13 +122,17 @@ public class KeyStoreManager {
      */
     private KeyStore loadKeyStore(final char[] pw, final URI location)
             throws CertificateException, NoSuchAlgorithmException, IOException {
-        log.info(String.format("Searching for keystore file %s", location.toString()));
+        if (log.isInfoEnabled()) {
+            log.info(String.format("Searching for keystore file %s", location.toString()));
+        }
         KeyStore store;
         try {
             store = KeyStore.getInstance(KeyStore.getDefaultType());
-        } catch(KeyStoreException e) {
-            log.error("Could not create a KeyStore with default type!");
-            log.error(e.getMessage(), e);
+        } catch (KeyStoreException e) {
+            if (log.isErrorEnabled()) {
+                log.error("Could not create a KeyStore with default type!");
+                log.error(e.getMessage(), e);
+            }
             return null;
         }
         final var path = Paths.get(location);
@@ -124,33 +141,50 @@ public class KeyStoreManager {
         pathString = pathString.chars().dropWhile(value -> IntStream.of('\\', '/', '.').anyMatch(v -> v == value))
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
-        log.info("Path: " + pathString);
+
+        if (log.isInfoEnabled()) {
+            log.info("Path: " + pathString);
+        }
 
         final var keyStoreOnClassPath = new ClassPathResource(pathString).exists();
 
         if (!keyStoreOnClassPath) {
-            log.warn("Could not load keystore from classpath, trying to find it at system scope!");
+            if (log.isWarnEnabled()) {
+                log.warn("Could not load keystore from classpath, trying to find it at system scope!");
+            }
             try {
-                log.info(path.toString());
+                if (log.isInfoEnabled()) {
+                    log.info(path.toString());
+                }
                 final var fis = new FileInputStream(path.toString());
                 store.load(fis, pw);
                 fis.close();
             } catch (IOException e) {
-                log.warn("Could not find keystore at system scope, aborting!");
+                if (log.isWarnEnabled()) {
+                    log.warn("Could not find keystore at system scope, aborting!");
+                }
                 throw e;
             }
         } else {
-            log.info("Loading KeyStore from ClassPath...");
-            final InputStream is = new ClassPathResource(pathString).getInputStream();
+            if (log.isInfoEnabled()) {
+                log.info("Loading KeyStore from ClassPath...");
+            }
+
+            final var is = new ClassPathResource(pathString).getInputStream();
+
             try {
                 store.load(is, pw);
                 is.close();
             } catch (IOException e) {
-                log.warn("Could not find keystore, aborting!");
+                if (log.isWarnEnabled()) {
+                    log.warn("Could not find keystore, aborting!");
+                }
                 throw e;
             }
         }
-        log.debug("Keystore loaded");
+        if (log.isDebugEnabled()) {
+            log.debug("Keystore loaded");
+        }
         return store;
     }
 
@@ -174,17 +208,23 @@ public class KeyStoreManager {
      */
     private X509TrustManager loadTrustManager(final char[] password)
             throws NoSuchAlgorithmException, KeyStoreException, UnrecoverableKeyException {
-        log.debug("Loading trustmanager");
+        if (log.isDebugEnabled()) {
+            log.debug("Loading trustmanager");
+        }
+
         final var keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         keyManagerFactory.init(this.trustStore, password);
-        final var trustManagerFactory =
-                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+
+        final var trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         trustManagerFactory.init(this.trustStore);
+
         final var trustManagers = trustManagerFactory.getTrustManagers();
-        log.info("Trustmanager loaded");
+
+        if (log.isInfoEnabled()) {
+            log.info("Trustmanager loaded");
+        }
         if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
-            throw new IllegalStateException(
-                    "Unexpected default trust managers:" + Arrays.toString(trustManagers));
+            throw new IllegalStateException("Unexpected default trust managers:" + Arrays.toString(trustManagers));
         }
         return (X509TrustManager) trustManagers[0];
     }
@@ -199,10 +239,16 @@ public class KeyStoreManager {
      */
     private void getPrivateKeyFromKeyStore(final String keyAlias)
             throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException {
-        log.debug(String.format("Getting private key %s from keystore", keyAlias));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Getting private key %s from keystore", keyAlias));
+        }
+
         final var key = keyStore.getKey(keyAlias, keyStorePw);
         if (key instanceof PrivateKey) {
-            log.debug("Setting private key and connector certificate");
+            if (log.isDebugEnabled()) {
+                log.debug("Setting private key and connector certificate");
+            }
+
             this.privateKey = (PrivateKey) key;
             this.cert = keyStore.getCertificate(keyAlias);
         }
@@ -276,7 +322,6 @@ public class KeyStoreManager {
                 // do the same as checking the server.
                 jreTrustManager.checkClientTrusted(chain, authType);
             }
-
         };
     }
 }

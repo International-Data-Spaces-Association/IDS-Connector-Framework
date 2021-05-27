@@ -53,17 +53,28 @@ public class HttpServiceImpl implements HttpService {
     /** {@inheritDoc} */
     @Override
     public Response send(final String message, final URI target) throws IOException {
-       log.debug("Creating requestBody");
-        final var body = RequestBody.create(message, MediaType.parse("application/json"));
+       if (log.isDebugEnabled()) {
+           log.debug("Creating requestBody");
+       }
+
+       final var body = RequestBody.create(message, MediaType.parse("application/json"));
+
        return send(body, target);
     }
 
     /** {@inheritDoc} */
     @Override
     public Response send(final RequestBody requestBody, final URI target) throws IOException {
-        log.debug(String.format("building request to %s", target.toString()));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("building request to %s", target.toString()));
+        }
+
         final var request = buildRequest(requestBody, target);
-        log.debug(String.format("sending request to %s", target.toString()));
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("sending request to %s", target.toString()));
+        }
+
         return sendRequest(request, getClientWithSettings());
     }
 
@@ -72,9 +83,16 @@ public class HttpServiceImpl implements HttpService {
     public Response sendWithHeaders(final RequestBody requestBody,
                                     final URI target,
                                     final Map<String, String> headers) throws IOException {
-        log.debug(String.format("building request to %s", target.toString()));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("building request to %s", target.toString()));
+        }
+
         final var request = buildWithHeaders(requestBody, target, headers);
-        log.debug(String.format("sending request to %s", target.toString()));
+
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("sending request to %s", target.toString()));
+        }
+
         return sendRequest(request, getClientWithSettings());
     }
 
@@ -89,10 +107,14 @@ public class HttpServiceImpl implements HttpService {
     @Override
     public Response getWithHeaders(final URI target, final Map<String, String> headers) throws IOException {
         final var builder = new Request.Builder().url(target.toString()).get();
+
         headers.keySet().forEach(key -> {
-            log.debug(String.format("adding header part (%s,%s)", key, headers.get(key)));
-            builder.addHeader(key, headers.get(key));
-        });
+                                     if (log.isDebugEnabled()) {
+                                         log.debug(String.format("adding header part (%s,%s)", key, headers.get(key)));
+                                     }
+                                    builder.addHeader(key, headers.get(key));
+                            });
+
         final var request = builder.build();
         return sendRequest(request, getClientWithSettings());
     }
@@ -106,7 +128,11 @@ public class HttpServiceImpl implements HttpService {
      */
     private Request buildRequest(final RequestBody requestBody, final URI target) {
         final var targetURL = target.toString();
-        log.info("URL is valid: " + HttpUrl.parse(targetURL));
+
+        if (log.isInfoEnabled()) {
+            log.info("URL is valid: " + HttpUrl.parse(targetURL));
+        }
+
         return new Request.Builder()
                 .url(targetURL)
                 .post(requestBody)
@@ -126,7 +152,10 @@ public class HttpServiceImpl implements HttpService {
                                      final URI target,
                                      final Map<String, String> headers) {
         final var targetURL = target.toString();
-        log.info("URL is valid: " + HttpUrl.parse(targetURL));
+
+        if (log.isInfoEnabled()) {
+            log.info("URL is valid: " + HttpUrl.parse(targetURL));
+        }
 
         //!!! DO NOT PRINT RESPONSE BECAUSE RESPONSE BODY IS JUST ONE TIME READABLE
         // --> Message could not be parsed java.io.IOException: closed
@@ -134,7 +163,10 @@ public class HttpServiceImpl implements HttpService {
                 .url(targetURL)
                 .post(requestBody);
         //add all headers to request
-        log.debug("Adding headers");
+        if (log.isDebugEnabled()) {
+            log.debug("Adding headers");
+        }
+
         headers.keySet().forEach(key -> {
             log.debug(String.format("adding header part (%s,%s)", key, headers.get(key)));
             builder.addHeader(key, headers.get(key));
@@ -151,10 +183,17 @@ public class HttpServiceImpl implements HttpService {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     private Response sendRequest(final Request request, final OkHttpClient client) throws IOException {
-        log.info("Request is HTTPS: " + request.isHttps());
+        if (log.isInfoEnabled()) {
+            log.info("Request is HTTPS: " + request.isHttps());
+        }
+
         final var response = client.newCall(request).execute();
+
         if (!response.isSuccessful()) {
-            log.error("Error while sending the request!");
+            if (log.isErrorEnabled()) {
+                log.error("Error while sending the request!");
+            }
+
             throw new IOException("Unexpected code " + response + " With Body: " + Objects
                     .requireNonNull(response.body()).string());
         }
@@ -168,7 +207,10 @@ public class HttpServiceImpl implements HttpService {
      */
     private OkHttpClient getClientWithSettings() {
         if (timeoutSettings != null) {
-            log.debug("Generating a Client with specified timeout settings.");
+            if (log.isDebugEnabled()) {
+                log.debug("Generating a Client with specified timeout settings.");
+            }
+
             return provider.getClientWithTimeouts(
                     timeoutSettings.getConnectTimeout(),
                     timeoutSettings.getReadTimeout(),
@@ -176,15 +218,19 @@ public class HttpServiceImpl implements HttpService {
                     timeoutSettings.getCallTimeout()
             );
         }
-        log.debug("No timeout settings specified, using default client.");
+
+        if (log.isDebugEnabled()) {
+            log.debug("No timeout settings specified, using default client.");
+        }
+
         return provider.getClient();
     }
 
     /**
      * Inner class, managing timeout settings for custom HttpClients.
      */
-    @AllArgsConstructor
     @Data
+    @AllArgsConstructor
     private class TimeoutSettings {
         private Duration connectTimeout;
         private Duration readTimeout;

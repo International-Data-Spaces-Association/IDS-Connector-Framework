@@ -68,5 +68,4 @@ public class Base64EncodedFileBodyResponse<T extends Message> implements Message
         multiMap.put("payload", payload);
         return multiMap;
     }
-
 }

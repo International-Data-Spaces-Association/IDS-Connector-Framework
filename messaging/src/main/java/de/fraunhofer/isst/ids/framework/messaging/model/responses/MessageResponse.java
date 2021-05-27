@@ -17,7 +17,7 @@ public interface MessageResponse {
      * @return an empty MessageResponse
      */
     static MessageResponse empty() {
-        return (s) -> Map.of();
+        return s -> Map.of();
     }
 
     /**

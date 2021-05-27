@@ -30,52 +30,80 @@ import org.springframework.core.io.ClassPathResource;
 @ConditionalOnClass({ConfigurationModel.class, Connector.class, KeyStoreManager.class})
 public class ConfigProducer {
 
+    private static final Serializer SERIALIZER = new Serializer();
+
     private ConfigurationContainer configurationContainer;
     private ClientProvider clientProvider;
 
     /**
      * Load the ConfigurationModel from the location specified in the application.properties, initialize the KeyStoreManager.
      *
-     * @param serializer an infomodel serializer for reading the jsonLD configuration
      * @param properties the {@link ConfigProperties} parsed from an application.properties file
      */
-    public ConfigProducer(final Serializer serializer, final ConfigProperties properties) {
+    public ConfigProducer(final ConfigProperties properties) {
         try {
-            log.debug(String.format("Loading configuration from %s", properties.getPath()));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Loading configuration from %s", properties.getPath()));
+            }
+
             String config;
+
             //load config jsonLD from given path
             if (Paths.get(properties.getPath()).isAbsolute()) {
-                log.info(String.format("Loading config from absolute Path %s", properties.getPath()));
+                if (log.isInfoEnabled()) {
+                    log.info(String.format("Loading config from absolute Path %s", properties.getPath()));
+                }
+
                 final var fis = new FileInputStream(properties.getPath());
                 config = IOUtils.toString(fis);
                 fis.close();
             } else {
-                log.info(String.format("Loading config from classpath: %s", properties.getPath()));
+                if (log.isInfoEnabled()) {
+                    log.info(String.format("Loading config from classpath: %s", properties.getPath()));
+                }
+
                 final InputStream configurationStream = new ClassPathResource(properties.getPath()).getInputStream();
                 config = IOUtils.toString(configurationStream);
                 configurationStream.close();
             }
-            log.info("Importing configuration from file");
+
+            if (log.isInfoEnabled()) {
+                log.info("Importing configuration from file");
+            }
+
             //deserialize to ConfigurationModel
-            final var configModel = serializer.deserialize(config, ConfigurationModel.class);
-            log.info("Initializing KeyStoreManager");
+            final var configModel = SERIALIZER.deserialize(config, ConfigurationModel.class);
+            if (log.isInfoEnabled()) {
+                log.info("Initializing KeyStoreManager");
+            }
+
             //initialize the KeyStoreManager with Key and Truststore locations in the ConfigurationModel
             final var manager = new KeyStoreManager(configModel, properties.getKeyStorePassword().toCharArray(), properties.getTrustStorePassword().toCharArray(), properties.getKeyAlias());
-            log.info("Imported existing configuration from file.");
+            if (log.isInfoEnabled()) {
+                log.info("Imported existing configuration from file.");
+            }
             configurationContainer = new ConfigurationContainer(configModel, manager);
-            log.info("Creating ClientProvider");
+            if (log.isInfoEnabled()) {
+                log.info("Creating ClientProvider");
+            }
             //create a ClientProvider
             clientProvider = new ClientProvider(configurationContainer);
             configurationContainer.setClientProvider(clientProvider);
         } catch (IOException e) {
-            log.error("Configuration cannot be parsed!");
-            log.error(e.getMessage(), e);
+            if (log.isErrorEnabled()) {
+                log.error("Configuration cannot be parsed!");
+                log.error(e.getMessage(), e);
+            }
         } catch (KeyStoreManagerInitializationException e) {
-            log.error("KeyStoreManager could not be initialized!");
-            log.error(e.getMessage(), e);
+            if (log.isErrorEnabled()) {
+                log.error("KeyStoreManager could not be initialized!");
+                log.error(e.getMessage(), e);
+            }
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            log.error("ClientProvider could not be initialized!");
-            log.error(e.getMessage(), e);
+            if (log.isErrorEnabled()) {
+                log.error("ClientProvider could not be initialized!");
+                log.error(e.getMessage(), e);
+            }
         }
     }
 

@@ -71,7 +71,9 @@ public class TokenProvider implements DapsTokenProvider, DapsPublicKeyProvider {
      */
     @Override
     public String provideDapsToken() {
-        log.debug(String.format("Get a new DAT Token from %s", dapsUrl));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("Get a new DAT Token from %s", dapsUrl));
+        }
         return TokenManagerService.acquireToken(configurationContainer, clientProvider, dapsUrl);
     }
 
@@ -83,10 +85,14 @@ public class TokenProvider implements DapsTokenProvider, DapsPublicKeyProvider {
     @Override
     public Key providePublicKey() {
         if (publicKey == null) {
-            log.debug(String.format("Getting public key from %s!", dapsKeyUrl));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Getting public key from %s!", dapsKeyUrl));
+            }
             getPublicKey();
         }
-        log.debug("Provide public key!");
+        if (log.isDebugEnabled()) {
+            log.debug("Provide public key!");
+        }
         return publicKey;
     }
 
@@ -96,28 +102,35 @@ public class TokenProvider implements DapsTokenProvider, DapsPublicKeyProvider {
     private void getPublicKey() {
         try {
             //request the jwks
-            log.debug(String.format("Getting json web keyset from %s", dapsKeyUrl));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("Getting json web keyset from %s", dapsKeyUrl));
+            }
+
             final var client = clientProvider.getClient();
-            final var request = new Request.Builder()
-                    .url(dapsKeyUrl)
-                    .build();
+            final var request = new Request.Builder().url(dapsKeyUrl).build();
             final var response = client.newCall(request).execute();
             final var keySetJSON = Objects.requireNonNull(response.body()).string();
 
             //parse response as JsonWebKeySet
             final var jsonWebKeySet = new JsonWebKeySet(keySetJSON);
             final var key = jsonWebKeySet.getJsonWebKeys().stream().filter(k -> k.getKeyId().equals(keyKid)).findAny().orElse(null);
-            if (key != null){
+            if (key != null) {
                 this.publicKey = key.getKey();
             } else {
-                log.warn(String.format("Could not get JsonWebKey with kid %s from received KeySet! PublicKey is null!", keyKid));
+                if (log.isWarnEnabled()) {
+                    log.warn(String.format("Could not get JsonWebKey with kid %s from received KeySet! PublicKey is null!", keyKid));
+                }
             }
         } catch (IOException e) {
-            log.warn(String.format("Could not get key from %s!", dapsKeyUrl));
-            log.warn(e.getMessage(), e);
+            if (log.isWarnEnabled()) {
+                log.warn(String.format("Could not get key from %s!", dapsKeyUrl));
+                log.warn(e.getMessage(), e);
+            }
         } catch (JoseException e) {
-            log.warn("Could not create JsonWebKeySet from response!");
-            log.warn(e.getMessage(), e);
+            if (log.isWarnEnabled()) {
+                log.warn("Could not create JsonWebKeySet from response!");
+                log.warn(e.getMessage(), e);
+            }
         }
     }
 }

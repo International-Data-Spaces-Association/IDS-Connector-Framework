@@ -5,12 +5,14 @@ import java.time.ZoneId;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * The DefaultVerifier contains some default DAPS verification rules.
  */
 @Slf4j
+@UtilityClass
 public class DapsVerifier {
     /**
      * Check notbefore and expiration of the DAT Token Claims.
@@ -28,7 +30,9 @@ public class DapsVerifier {
                    (LocalDateTime.now().toLocalDate().isBefore(body.getExpiration().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()) ||
                    LocalDateTime.now().toLocalDate().isEqual(body.getExpiration().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()));
         } catch (Exception e) {
-            log.warn("Could not verify Claims of the DAT Token!");
+            if (log.isWarnEnabled()) {
+                log.warn("Could not verify Claims of the DAT Token!");
+            }
             throw new ClaimsException(e.getMessage());
         }
     }

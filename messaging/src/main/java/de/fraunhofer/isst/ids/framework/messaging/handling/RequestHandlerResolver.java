@@ -13,7 +13,7 @@ import de.fraunhofer.isst.ids.framework.messaging.model.messages.MessageHandler;
 public interface RequestHandlerResolver {
 
     /**
-     * Find the right {@link MessageHandler} for the given MessageType
+     * Find the right {@link MessageHandler} for the given MessageType.
      *
      * @param messageType class of the RequestMessage subtype a handler should be found for
      * @param <R> some subtype of RequestMessage

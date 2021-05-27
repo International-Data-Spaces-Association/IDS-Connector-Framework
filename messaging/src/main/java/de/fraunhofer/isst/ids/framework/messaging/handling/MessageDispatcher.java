@@ -99,18 +99,26 @@ public class MessageDispatcher {
         final var modelVersion = configurationContainer.getConnector().getOutboundModelVersion();
         //apply all preDispatchingFilters to the message
         for (final var preDispatchingFilter : this.preDispatchingFilters) {
-            log.debug("Applying a preDispatchingFilter");
+            if (log.isDebugEnabled()) {
+                log.debug("Applying a preDispatchingFilter");
+            }
             try {
                 final var result = preDispatchingFilter.process(header);
                 if (!result.isSuccess()) {
-                    log.debug("A preDispatchingFilter failed!");
-                    log.error(result.getMessage(), result.getError());
+                    if (log.isDebugEnabled()) {
+                        log.debug("A preDispatchingFilter failed!");
+                    }
+                    if (log.isErrorEnabled()) {
+                        log.error(result.getMessage(), result.getError());
+                    }
 
                     return ErrorResponse.withDefaultHeader(RejectionReason.MALFORMED_MESSAGE, result.getMessage(), connectorId, modelVersion, header.getId());
                 }
             } catch (Exception e) {
-                log.debug("A preDispatchingFilter threw an exception!");
-                log.debug(e.getMessage(), e);
+                if (log.isDebugEnabled()) {
+                    log.debug("A preDispatchingFilter threw an exception!");
+                    log.debug(e.getMessage(), e);
+                }
                 throw new PreProcessingException(e);
             }
         }
@@ -126,12 +134,16 @@ public class MessageDispatcher {
                 final var handler = (MessageHandler<R>) resolvedHandler.get();
                 return handler.handleMessage(header, new MessagePayloadImpl(payload, objectMapper));
             } catch (MessageHandlingException e) {
-                log.debug("The message handler threw an exception!");
+                if (log.isDebugEnabled()) {
+                    log.debug("The message handler threw an exception!");
+                }
 
                 return ErrorResponse.withDefaultHeader(RejectionReason.INTERNAL_RECIPIENT_ERROR, "Error while handling the request!", connectorId, modelVersion, header.getId());
             }
         } else {
-            log.debug(String.format("No message handler exists for %s", header.getClass()));
+            if (log.isDebugEnabled()) {
+                log.debug(String.format("No message handler exists for %s", header.getClass()));
+            }
 
             //If no handler for the type exists, the message type isn't supported
             return ErrorResponse.withDefaultHeader(RejectionReason.MESSAGE_TYPE_NOT_SUPPORTED, "No handler for provided message type was found!", connectorId, modelVersion, header.getId());
