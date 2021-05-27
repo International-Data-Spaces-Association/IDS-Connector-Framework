@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
 
+## [4.0.8] - UNRELEASED
+### Added
+- Repo: Conribution-Guideline and Code-of-Conduct files
+
+### Fix
+- Removed Resource-Payload in ResourceUnavailableMessage to Broker
+
 ## [4.0.7] - 2021-03-09
 ### Changed
 - IDSController now accepts messages with empty payloads
