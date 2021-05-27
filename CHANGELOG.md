@@ -14,7 +14,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
 
-## [5.0.1] - UNRELEASED
+## [5.0.1] - 2021-05-27
 
 ### Changes
 - Patch Change: Code refactoring
