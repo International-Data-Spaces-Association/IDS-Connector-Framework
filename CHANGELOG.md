@@ -14,6 +14,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
 
+## [5.0.2] - 2021-06-07
+
+### Changes
+- Update Infomodel-Artifacts dependencies 4.0.5 -> 4.0.8
+
 ## [5.0.1] - 2021-05-27
 
 ### Changes
