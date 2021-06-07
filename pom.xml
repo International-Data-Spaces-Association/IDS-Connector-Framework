@@ -31,7 +31,7 @@
     </modules>
 
     <properties>
-        <revision>5.0.1</revision>
+        <revision>5.0.2</revision>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -59,9 +59,9 @@
 
         <!-- internal dependencies -->
 <!--    <yaim.version>0.1.1-SNAPSHOT</yaim.version>-->
-        <de.fraunhofer.iais.eis.ids.infomodel.version>4.0.5</de.fraunhofer.iais.eis.ids.infomodel.version>
-        <de.fraunhofer.iais.eis.ids.infomodel.serializer.version>4.0.5</de.fraunhofer.iais.eis.ids.infomodel.serializer.version>
-        <de.fraunhofer.iais.eis.ids.infomodel.validator.version>4.0.5</de.fraunhofer.iais.eis.ids.infomodel.validator.version>
+        <de.fraunhofer.iais.eis.ids.infomodel.version>4.0.8</de.fraunhofer.iais.eis.ids.infomodel.version>
+        <de.fraunhofer.iais.eis.ids.infomodel.serializer.version>4.0.8</de.fraunhofer.iais.eis.ids.infomodel.serializer.version>
+        <de.fraunhofer.iais.eis.ids.infomodel.validator.version>4.0.8</de.fraunhofer.iais.eis.ids.infomodel.validator.version>
 
         <!-- production dependencies -->
         <servlet-api.version>4.0.1</servlet-api.version>
