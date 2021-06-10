@@ -134,11 +134,13 @@ public class TokenManagerService {
                 log.debug("Getting idsutils client");
             }
 
+            final var completeDapsUrl = determineDapsUrl(dapsUrl);
+
             final var client = provider.getClient();
-            final var request = new Request.Builder().url(dapsUrl + "/v2/token").post(formBody).build();
+            final var request = new Request.Builder().url(completeDapsUrl).post(formBody).build();
 
             if (log.isDebugEnabled()) {
-                log.debug(String.format("Sending request to %s", dapsUrl + "/v2/token"));
+                log.debug(String.format("Sending request to %s", completeDapsUrl));
             }
 
             final var jwtResponse = client.newCall(request).execute();
@@ -182,6 +184,27 @@ public class TokenManagerService {
             }
         }
         return dynamicAttributeToken;
+    }
+
+    /**
+     * Determine the DAPS URL to be used and provide backwards-compability.
+     *
+     * @param dapsUrl The original DAPS-URL used
+     * @return The eventually adjusted DAPS-URL
+     */
+    private static String determineDapsUrl(final String dapsUrl) {
+        var completeDapsUrl = dapsUrl;
+
+        if ("https://daps.aisec.fraunhofer.de".equals(dapsUrl)) {
+            //Backward-compability, AISEC DAPS uses specific URL suffix, add if not present in AISEC-URL
+            completeDapsUrl += "/v2/token";
+        }
+
+        if (log.isInfoEnabled()) {
+            log.info("Using DAPS-URL: " + completeDapsUrl);
+        }
+
+        return completeDapsUrl;
     }
 
     /***
