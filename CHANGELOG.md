@@ -16,8 +16,12 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 
 ## [5.0.3] - UNRELEASED
 
+### Patch Change: Infomodel Maintenance
+- Used Dependency Version: 4.0.9 (released 2021-06-08)
+
 ### Fix
 - Patch Change: The DAPS URL is now no longer automatically suffixed with /v2/token. Backward compatibility is ensured in the implementation, therefore no major change.
+
 
 ## [5.0.2] - 2021-06-07
 
