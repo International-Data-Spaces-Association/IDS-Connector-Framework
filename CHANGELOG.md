@@ -14,6 +14,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
 
+## [5.0.3] - UNRELEASED
+
+### Fix
+- Patch Change: The DAPS URL is now no longer automatically suffixed with /v2/token. Backward compatibility is ensured in the implementation, therefore no major change.
+
 ## [5.0.2] - 2021-06-07
 
 ### Changes
