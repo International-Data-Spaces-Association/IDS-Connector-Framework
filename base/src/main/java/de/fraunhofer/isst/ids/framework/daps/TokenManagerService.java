@@ -144,9 +144,10 @@ public class TokenManagerService {
                 LOG.debug("Getting idsutils client");
                 var client = provider.getClient();
 
-                Request request = new Request.Builder().url(dapsUrl + "/v2/token").post(formBody).build();
+                final var completeDapsUrl = determineDapsUrl(dapsUrl);
+                final var request = new Request.Builder().url(completeDapsUrl).post(formBody).build();
 
-                LOG.debug(String.format("Sending request to %s", dapsUrl+"/v2/token"));
+                LOG.debug(String.format("Sending request to %s", completeDapsUrl));
                 Response jwtResponse = client.newCall(request).execute();
                 if (!jwtResponse.isSuccessful()) {
                     LOG.debug("DAPS request was not successful");
@@ -172,6 +173,25 @@ public class TokenManagerService {
                 LOG.error("Certificate of the Connector is missing aki/ski extensions!");
             }
             return dynamicAttributeToken;
+    }
+
+    /**
+     * Determine the DAPS URL to be used and provide backwards-compability.
+     *
+     * @param dapsUrl The original DAPS-URL used
+     * @return The eventually adjusted DAPS-URL
+     */
+    private static String determineDapsUrl(final String dapsUrl) {
+        var completeDapsUrl = dapsUrl;
+
+        if ("https://daps.aisec.fraunhofer.de".equals(dapsUrl)) {
+            //Backward-compability, AISEC DAPS uses specific URL suffix, add if not present in AISEC-URL
+            completeDapsUrl += "/v2/token";
+        }
+
+        LOG.info("Using DAPS-URL: " + completeDapsUrl);
+
+        return completeDapsUrl;
     }
 
     /***
