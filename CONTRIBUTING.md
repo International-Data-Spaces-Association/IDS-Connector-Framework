@@ -51,10 +51,10 @@ Special case
 
 ## Branches
 
-This repository has a `development` branch in addition to the `master` branch. The idea is to always 
+This repository has a `development` branch in addition to the `main` branch. The idea is to always 
 merge other branches into the `development` branch and to push the changes from 
-there into the `master` only for releases. This way, the `development` branch is always up to date, 
-with the risk of small issues, while the `master` only contains official releases.
+there into the `main` only for releases. This way, the `development` branch is always up to date, 
+with the risk of small issues, while the `main` only contains official releases.
 
 After creating an issue yourself or if you want to address an existing issue, you have to create a 
 branch with a unique number and name that assigns it to an issue. Therefore, follow the guidelines 
