@@ -14,6 +14,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
 
+## [5.0.4] - 2021-06-21
+
+### Patch Change: Infomodel Maintenance
+- Used Dependency Version: 4.0.10 (released 2021-06-21)
+
 ## [5.0.3] - 2021-06-10
 
 ### Patch Change: Infomodel Maintenance
