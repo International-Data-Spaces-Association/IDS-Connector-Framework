@@ -20,6 +20,7 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 - Patch Change: Code refactoring to include more pre-built Lombok functionality
 
 ### Dependency Maintenance
+- Dependabot: Dependabot will now automatically suggest pull requests for updates to dependencies.
 - Upgrade: org.projectlombok:lombok 1.18.10 -> 1.18.20
 - Upgrade: org.slf4j:slf4j-api 1.7.28 -> 1.7.31
 - Upgrade: com.squareup.okhttp3:mockwebserver 4.2.2 -> 4.9.1
