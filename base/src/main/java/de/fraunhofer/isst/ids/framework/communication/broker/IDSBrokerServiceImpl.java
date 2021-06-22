@@ -13,6 +13,9 @@ import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.daps.DapsTokenProvider;
 import de.fraunhofer.isst.ids.framework.util.ClientProvider;
 import de.fraunhofer.isst.ids.framework.util.IDSUtils;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -28,29 +31,16 @@ import org.springframework.stereotype.Service;
  **/
 @Slf4j
 @Service
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class IDSBrokerServiceImpl implements IDSBrokerService {
 
-    private static final String     INFO_MODEL_VERSION = "4.0.0";
-    private static final Serializer SERIALIZER         = new Serializer();
+    static final String     INFO_MODEL_VERSION = "4.0.0";
+    static final Serializer SERIALIZER         = new Serializer();
 
-    private ConfigurationContainer container;
-    private ClientProvider clientProvider;
-    private DapsTokenProvider tokenProvider;
-
-    /**
-     * Creates the IDSBrokerCommunication controller.
-     *
-     * @param container Configuration container
-     * @param provider providing underlying OkHttpClient
-     * @param tokenProvider providing DAT Token for RequestMessage
-     */
-    public IDSBrokerServiceImpl(final ConfigurationContainer container,
-                                final ClientProvider provider,
-                                final DapsTokenProvider tokenProvider) {
-        this.container = container;
-        this.clientProvider = provider;
-        this.tokenProvider = tokenProvider;
-    }
+    ConfigurationContainer container;
+    ClientProvider clientProvider;
+    DapsTokenProvider tokenProvider;
 
     /** {@inheritDoc} */
     @Override

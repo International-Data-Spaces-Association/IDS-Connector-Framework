@@ -2,6 +2,8 @@ package de.fraunhofer.isst.ids.framework.messaging.handling;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,10 +17,11 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @Slf4j
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class IDSEndpointService {
 
-    private IDSController idsController;
-    private RequestMappingHandlerMapping requestMappingHandlerMapping;
+    IDSController idsController;
+    RequestMappingHandlerMapping requestMappingHandlerMapping;
 
     /**
      * Use <code>/api/ids/data</code> and <code>/api/ids/infrastructure</code> routes as default mappings.

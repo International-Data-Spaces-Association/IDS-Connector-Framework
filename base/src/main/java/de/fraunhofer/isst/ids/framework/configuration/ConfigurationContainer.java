@@ -6,6 +6,8 @@ import java.security.NoSuchAlgorithmException;
 import de.fraunhofer.iais.eis.ConfigurationModel;
 import de.fraunhofer.iais.eis.Connector;
 import de.fraunhofer.isst.ids.framework.util.ClientProvider;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -13,11 +15,12 @@ import lombok.extern.slf4j.Slf4j;
  * and manages changes of the configuration.
  */
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConfigurationContainer {
 
-    private ConfigurationModel configurationModel;
-    private KeyStoreManager keyStoreManager;
-    private ClientProvider clientProvider;
+    ConfigurationModel configurationModel;
+    KeyStoreManager keyStoreManager;
+    ClientProvider clientProvider;
 
     /**
      * Create a ConfigurationContainer with a ConfigurationModel and KeyStoreManager.

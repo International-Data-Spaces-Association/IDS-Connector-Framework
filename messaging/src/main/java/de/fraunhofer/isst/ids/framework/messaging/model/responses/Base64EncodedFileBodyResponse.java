@@ -9,6 +9,7 @@ import java.util.Map;
 import de.fraunhofer.iais.eis.Message;
 import de.fraunhofer.iais.eis.RequestMessage;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import lombok.experimental.FieldDefaults;
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,10 +19,11 @@ import org.springframework.http.MediaType;
  * Utility class for returning files using Base64 encoding.
  * @param <T> a subclass of ResponseMessage or NotificationMessage
  */
+@FieldDefaults(makeFinal = true)
 public class Base64EncodedFileBodyResponse<T extends Message> implements MessageResponse {
 
-    final T header;
-    final HttpEntity<byte[]> payload;
+    T header;
+    HttpEntity<byte[]> payload;
 
     /**
      * Create a MessageResponse with a Payload containing a Base64 encoded File.

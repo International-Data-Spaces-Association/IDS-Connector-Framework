@@ -4,8 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -17,15 +19,16 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  * This class implements IDSCommunication for the MQTT Protocol.
  */
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class IDSMQTTCommunication {
 
-    private Queue<String> messageQueue;
+    Queue<String> messageQueue;
 
     @Getter @Setter
-    private MqttClient client = null;
+    MqttClient client = null;
 
     @Getter
-    private final MqttConnectOptions opt;
+    final MqttConnectOptions opt;
 
     public IDSMQTTCommunication() {
         super();

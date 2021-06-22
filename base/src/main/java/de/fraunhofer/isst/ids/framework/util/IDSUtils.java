@@ -20,6 +20,8 @@ import java.util.Properties;
 import de.fraunhofer.iais.eis.ConfigurationModel;
 import de.fraunhofer.iais.eis.Connector;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,10 +31,11 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @UtilityClass
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class IDSUtils {
 
-    private static final Base64.Encoder ENCODER    = Base64.getEncoder();
-    private static final Serializer     SERIALIZER = new Serializer();
+    static Base64.Encoder ENCODER    = Base64.getEncoder();
+    static Serializer     SERIALIZER = new Serializer();
 
     /**
      * Hash a value with a given MessageDigest.

@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Objects;
 
 import de.fraunhofer.isst.ids.framework.util.ClientProvider;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -23,10 +25,11 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class HttpServiceImpl implements HttpService {
 
-    private ClientProvider provider;
-    private TimeoutSettings timeoutSettings;
+    ClientProvider provider;
+    TimeoutSettings timeoutSettings;
 
     /**
      * @param provider the {@link ClientProvider} used to generate HttpClients with the current connector configuration

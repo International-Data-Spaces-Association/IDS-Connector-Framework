@@ -17,6 +17,8 @@ import java.util.List;
 import de.fraunhofer.iais.eis.ConfigurationModel;
 import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.configuration.KeyStoreManager;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Authenticator;
 import okhttp3.Credentials;
@@ -26,10 +28,11 @@ import okhttp3.OkHttpClient;
  * The ClientProvider uses the {@link ConfigurationContainer} to rebuild clients, when a new configurationContainer is created.
  */
 @Slf4j
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ClientProvider {
 
-    private ConfigurationContainer configContainer;
-    private OkHttpClient client;
+    ConfigurationContainer configContainer;
+    OkHttpClient client;
 
     /**
      * Constructor, creating a Client provider using the KeyStore part from the ConfigurationContainer.

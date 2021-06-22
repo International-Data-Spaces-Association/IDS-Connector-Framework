@@ -2,27 +2,20 @@ package de.fraunhofer.isst.ids.framework.messaging.model.filters;
 
 import java.util.Objects;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
 /**
  * Result that is returned by a PreDispatchingFilter (with information about why a message was accepted or rejected).
  */
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class PreDispatchingFilterResult {
 
-    private final Throwable error;
-    private final boolean success;
-    private final String message;
-
-    /**
-     * The result contains a message about its result, can contain an error if something went wrong and has a boolean flag for success.
-     *
-     * @param error an error that occured during PreDispatchingFilter processing
-     * @param success true if the predispatchingfilter successfully checked and accepted the message
-     * @param message information about why the {@link PreDispatchingFilter} accepted (or rejected) the message.
-     */
-    protected PreDispatchingFilterResult(final Throwable error, final boolean success, final String message) {
-        this.error = error;
-        this.success = success;
-        this.message = message;
-    }
+    Throwable error;
+    boolean success;
+    String message;
 
     /**
      * Static method returning a builder.
