@@ -96,7 +96,7 @@
         <sonar.projectKey>de.fraunhofer.isst.ids.framework</sonar.projectKey>
         <sonar.projectVersion>${revision}</sonar.projectVersion>
         <sonar.host.url>https://dev.isst.fraunhofer.de/sonarlts/</sonar.host.url>
-        <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.jacoco.reportPath>base/target/jacoco.exec</sonar.jacoco.reportPath>
