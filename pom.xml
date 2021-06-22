@@ -53,7 +53,7 @@
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <dependency-check-maven.version>5.2.2</dependency-check-maven.version>
-        <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
         <flatten-maven-plugin.version>1.1.0</flatten-maven-plugin.version>
         <jose4j.version>0.7.8</jose4j.version>
 
