@@ -29,12 +29,16 @@ public class IDSUtilsTest {
      */
     @Test
     public void testGetClient() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreManagerInitializationException, IOException {
+        final var connectorEndpointBuilder = new ConnectorEndpointBuilder();
+        connectorEndpointBuilder._accessURL_(URI.create("https://example.com"));
+
         final var connector = new BaseConnectorBuilder()
                 ._curator_(URI.create("https://example.com"))
                 ._inboundModelVersion_(new ArrayList<>(List.of("3.1.2-SNAPSHOT")))
                 ._maintainer_(URI.create("https://example.com"))
                 ._outboundModelVersion_("3.1.2-SNAPSHOT")
                 ._securityProfile_(SecurityProfile.BASE_SECURITY_PROFILE)
+                ._hasDefaultEndpoint_(connectorEndpointBuilder.build())
                 .build();
         final var model = new ConfigurationModelBuilder()
                 ._keyStore_(URI.create("file:///isst-testconnector.p12"))

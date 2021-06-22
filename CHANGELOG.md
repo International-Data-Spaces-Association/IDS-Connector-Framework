@@ -21,6 +21,14 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 
 ### Dependency Maintenance
 - Dependabot: Dependabot will now automatically suggest pull requests for updates to dependencies.
+- Upgrade: flatten-maven-plugin 1.1.0 -> 1.2.7
+- Upgrade: jacoco-maven-plugin 0.8.5 -> 0.8.7 
+- Upgrade: maven-dependency-plugin 3.1.1 -> 3.2.0
+- Upgrade: maven-source-plugin 3.2.0 -> 3.2.1
+- Upgrade: mockwebserver 4.2.2 -> 4.9.1
+- Upgrade: maven-javadoc-plugin 3.1.1 -> 3.3.0
+- Upgrade: maven-failsafe-plugin 3.0.0-M3 -> 3.0.0-M5
+- Upgrade: versions-maven-plugin 2.5 -> 2.8.1 
 - Upgrade: org.projectlombok:lombok 1.18.10 -> 1.18.20
 - Upgrade: org.slf4j:slf4j-api 1.7.28 -> 1.7.31
 - Upgrade: com.squareup.okhttp3:mockwebserver 4.2.2 -> 4.9.1
@@ -41,14 +49,11 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 - Upgrade: org.mapstruct:mapstruct-processor 1.3.1.Final -> 1.4.2.Final
 - Upgrade: org.springframework.boot:spring-boot-starter 2.4.3 -> 2.5.1
 - Upgrade: org.springframework.boot:spring-boot-starter-test 2.4.3 -> 2.5.1
-- Upgrade: org.springframework:spring-test 5.3.4 -> 5.3.8
-- Upgrade: org.springframework:spring-tx 5.3.4 -> 5.3.8
-- Upgrade: org.springframework:spring-web 5.3.4 -> 5.3.8
-- Upgrade: org.springframework:spring-webmvc 5.3.4 -> 5.3.8
 - Upgrade: com.fasterxml.jackson.core:jackson-databind 2.10.1 -> 2.12.3
 - Upgrade: io.springfox:springfox-bean-validators 2.9.2 -> 3.0.0
 - Upgrade: io.springfox:springfox-swagger-ui 2.9.2 -> 3.0.0
 - Upgrade: io.springfox:springfox-swagger2 2.9.2 -> 3.0.0
+- Downgrade: plugins:maven-surefire-plugin to 2.19.1
 
 ## [5.0.4] - 2021-06-21
 
