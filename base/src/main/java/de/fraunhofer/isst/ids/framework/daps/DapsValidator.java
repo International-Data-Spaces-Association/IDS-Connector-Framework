@@ -11,6 +11,8 @@ import de.fraunhofer.isst.ids.framework.util.MultipartStringParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileUploadException;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,11 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class DapsValidator {
 
-    private DapsPublicKeyProvider keyProvider;
-    private Serializer serializer = new Serializer();
+    DapsPublicKeyProvider keyProvider;
+    Serializer serializer = new Serializer();
 
     public DapsValidator(final DapsPublicKeyProvider keyProvider) {
         this.keyProvider = keyProvider;

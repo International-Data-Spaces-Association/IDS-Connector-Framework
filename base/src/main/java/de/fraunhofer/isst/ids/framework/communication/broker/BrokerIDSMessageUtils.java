@@ -20,6 +20,8 @@ import de.fraunhofer.iais.eis.ResourceUpdateMessage;
 import de.fraunhofer.iais.eis.ResourceUpdateMessageBuilder;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.isst.ids.framework.util.IDSUtils;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.experimental.UtilityClass;
 import okhttp3.MultipartBody;
 
@@ -27,9 +29,10 @@ import okhttp3.MultipartBody;
  * The MessageUtils class contains utility methods for building Infomodel Messages (used by the {@link IDSBrokerServiceImpl} class).
  */
 @UtilityClass
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class BrokerIDSMessageUtils {
 
-    private static final Serializer SERIALIZER = new Serializer();
+    static Serializer SERIALIZER = new Serializer();
 
     /**
      * Create a ResourceUnavailableMessage used for unregistering the given resource at a broker.

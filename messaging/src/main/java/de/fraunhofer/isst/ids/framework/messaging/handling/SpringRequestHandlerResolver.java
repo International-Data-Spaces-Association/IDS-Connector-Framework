@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  * Resolver that uses the Spring dependency injection mechanism to find the matching message handler.
  */
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SpringRequestHandlerResolver implements RequestHandlerResolver {
 
     private final ApplicationContext appContext;
@@ -25,16 +26,6 @@ public class SpringRequestHandlerResolver implements RequestHandlerResolver {
     private static class Tuple<K, V> {
         final K key;
         final V value;
-    }
-
-    /**
-     * Default constructor autowired by Spring and sets ApplicationContext from Spring.
-     *
-     * @param appContext context to access Spring CDI
-     */
-    @Autowired
-    public SpringRequestHandlerResolver(final ApplicationContext appContext) {
-        this.appContext = appContext;
     }
 
     /**

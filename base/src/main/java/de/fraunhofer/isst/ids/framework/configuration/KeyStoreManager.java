@@ -5,7 +5,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.security.KeyStore;
@@ -22,7 +21,9 @@ import java.util.stream.IntStream;
 
 import de.fraunhofer.iais.eis.ConfigurationModel;
 import de.fraunhofer.isst.ids.framework.util.IDSUtils;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 
@@ -38,17 +39,18 @@ import org.springframework.core.io.ClassPathResource;
  */
 @Slf4j
 @Getter
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class KeyStoreManager {
 
-    private ConfigurationModel configurationModel;
-    private KeyStore keyStore;
-    private char[] keyStorePw;
-    private String keyAlias;
-    private KeyStore trustStore;
-    private char[] trustStorePw;
-    private PrivateKey privateKey;
-    private Certificate cert;
-    private X509TrustManager trustManager;
+    ConfigurationModel configurationModel;
+    KeyStore keyStore;
+    char[] keyStorePw;
+    String keyAlias;
+    KeyStore trustStore;
+    char[] trustStorePw;
+    PrivateKey privateKey;
+    Certificate cert;
+    X509TrustManager trustManager;
 
     /**
      * Build the KeyStoreManager from the given configuration.
@@ -206,7 +208,7 @@ public class KeyStoreManager {
      * @throws UnrecoverableKeyException if the key cannot be recovered (e.g. the given password is wrong)
      * @throws KeyStoreException if initialization of the trustmanager fails
      */
-    private X509TrustManager loadTrustManager(final char[] password)
+    private X509TrustManager loadTrustManager(final char... password)
             throws NoSuchAlgorithmException, KeyStoreException, UnrecoverableKeyException {
         if (log.isDebugEnabled()) {
             log.debug("Loading trustmanager");

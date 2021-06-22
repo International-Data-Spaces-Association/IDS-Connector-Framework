@@ -18,6 +18,8 @@ import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.messaging.model.filters.PreProcessingException;
 import de.fraunhofer.isst.ids.framework.util.IDSUtils;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,14 +34,15 @@ import org.springframework.util.MultiValueMap;
  */
 @Slf4j
 @Controller
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class IDSController {
 
-    private static final String HEADER_MULTIPART_NAME = "header";
-    private static final String PAYLOAD_MULTIPART_NAME = "payload";
+    static String HEADER_MULTIPART_NAME = "header";
+    static String PAYLOAD_MULTIPART_NAME = "payload";
 
-    private final MessageDispatcher messageDispatcher;
-    private final ConfigurationContainer configurationContainer;
-    private final Serializer serializer;
+    MessageDispatcher messageDispatcher;
+    ConfigurationContainer configurationContainer;
+    Serializer serializer;
 
     @Autowired
     public IDSController(final MessageDispatcher messageDispatcher,

@@ -4,19 +4,19 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 /**
  * Implementation of {@link MessagePayload} interface. Can parse payload from JSON and return the resulting inputstream.
  */
+@AllArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class MessagePayloadImpl implements MessagePayload {
 
-    private final InputStream underlyingInputStream;
-    private final ObjectMapper objectMapper;
-
-    public MessagePayloadImpl(final InputStream underlyingInputStream, final ObjectMapper objectMapper) {
-        this.underlyingInputStream = underlyingInputStream;
-        this.objectMapper = objectMapper;
-    }
+    InputStream underlyingInputStream;
+    ObjectMapper objectMapper;
 
     @Override
     public InputStream getUnderlyingInputStream() {

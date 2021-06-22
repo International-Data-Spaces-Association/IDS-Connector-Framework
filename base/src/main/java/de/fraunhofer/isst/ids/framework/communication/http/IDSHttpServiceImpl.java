@@ -9,6 +9,9 @@ import de.fraunhofer.isst.ids.framework.configuration.ConfigurationContainer;
 import de.fraunhofer.isst.ids.framework.daps.ClaimsException;
 import de.fraunhofer.isst.ids.framework.daps.DapsValidator;
 import de.fraunhofer.isst.ids.framework.util.MultipartStringParser;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -20,19 +23,13 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class IDSHttpServiceImpl implements IDSHttpService {
 
-    private HttpService httpService;
-    private DapsValidator dapsValidator;
-    private ConfigurationContainer configurationContainer;
-
-    public IDSHttpServiceImpl(final HttpService httpService,
-                              final DapsValidator dapsValidator,
-                              final ConfigurationContainer configurationContainer) {
-        this.httpService = httpService;
-        this.dapsValidator = dapsValidator;
-        this.configurationContainer = configurationContainer;
-    }
+    HttpService httpService;
+    DapsValidator dapsValidator;
+    ConfigurationContainer configurationContainer;
 
     /** {@inheritDoc} */
     @Override

@@ -14,6 +14,41 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer.de/fhg-isst-ids/ids-framework)
 
+## [5.0.5] - UNRELEASED
+
+### Changes:
+- Patch Change: Code refactoring to include more pre-built Lombok functionality
+
+### Dependency Maintenance
+- Upgrade: org.projectlombok:lombok 1.18.10 -> 1.18.20
+- Upgrade: org.slf4j:slf4j-api 1.7.28 -> 1.7.31
+- Upgrade: com.squareup.okhttp3:mockwebserver 4.2.2 -> 4.9.1
+- Upgrade: com.squareup.okhttp3:okhttp 4.2.2 -> 4.9.1
+- Upgrade: io.netty:netty-common 4.1.43.Final -> 4.1.65.Final
+- Upgrade: io.netty:netty-transport 4.1.43.Final -> 4.1.65.Final
+- Upgrade: mysql:mysql-connector-java 8.0.18 -> 8.0.25
+- Upgrade: org.apache.commons:commons-compress 1.19 -> 1.20
+- Upgrade: org.apache.commons:commons-csv 1.7 -> 1.8
+- Upgrade: org.apache.poi:poi-ooxml 4.1.1 -> 5.0.0
+- Upgrade: org.bitbucket.b_c:jose4j 0.7.0 -> 0.7.8
+- Upgrade: org.bouncycastle:bcpkix-fips 1.0.4 -> 1.0.5
+- Upgrade: org.eclipse.paho:org.eclipse.paho.client.mqttv3 1.2.2 -> 1.2.5
+- Upgrade: org.jooq:jooq 3.12.2 -> 3.14.11
+- Upgrade: org.json:json 20190722 -> 20210307
+- Upgrade: org.junit.jupiter:junit-jupiter-api 5.5.2 -> 5.7.2
+- Upgrade: org.junit.jupiter:junit-jupiter-engine 5.5.2 -> 5.7.2
+- Upgrade: org.mapstruct:mapstruct-processor 1.3.1.Final -> 1.4.2.Final
+- Upgrade: org.springframework.boot:spring-boot-starter 2.4.3 -> 2.5.1
+- Upgrade: org.springframework.boot:spring-boot-starter-test 2.4.3 -> 2.5.1
+- Upgrade: org.springframework:spring-test 5.3.4 -> 5.3.8
+- Upgrade: org.springframework:spring-tx 5.3.4 -> 5.3.8
+- Upgrade: org.springframework:spring-web 5.3.4 -> 5.3.8
+- Upgrade: org.springframework:spring-webmvc 5.3.4 -> 5.3.8
+- Upgrade: com.fasterxml.jackson.core:jackson-databind 2.10.1 -> 2.12.3
+- Upgrade: io.springfox:springfox-bean-validators 2.9.2 -> 3.0.0
+- Upgrade: io.springfox:springfox-swagger-ui 2.9.2 -> 3.0.0
+- Upgrade: io.springfox:springfox-swagger2 2.9.2 -> 3.0.0
+
 ## [5.0.4] - 2021-06-21
 
 ### Patch Change: Infomodel Maintenance
