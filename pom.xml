@@ -87,7 +87,7 @@
         <junit-jupiter.version>5.7.2</junit-jupiter.version>
         <moquette-broker.version>0.12.1</moquette-broker.version>
         <okhttp-mock.version>1.3.2</okhttp-mock.version>
-        <okhttp3.mockwebserver.version>4.2.2</okhttp3.mockwebserver.version>
+        <okhttp3.mockwebserver.version>4.9.1</okhttp3.mockwebserver.version>
         <netty-components.version>4.1.65.Final</netty-components.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
 
