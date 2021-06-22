@@ -25,8 +25,8 @@
         <springfox-swagger.version>3.0.0</springfox-swagger.version>
         <sonar.projectKey>de.fraunhofer.isst.ids.framework.messaging.core</sonar.projectKey>
         <spring-boot-starter-web.version>2.2.0.RELEASE</spring-boot-starter-web.version>
-        <spring-tx.version>5.3.8</spring-tx.version>
-        <spring-web.version>5.3.8</spring-web.version>
+        <spring-tx.version>5.3.4</spring-tx.version>
+        <spring-web.version>5.3.4</spring-web.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.ws.rs-api.version>2.1.1</javax.ws.rs-api.version>
     </properties>
@@ -90,7 +90,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>5.3.8</version>
+            <version>5.3.4</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
@@ -134,7 +134,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>5.3.8</version>
+            <version>5.3.4</version>
             <scope>test</scope>
         </dependency>
 

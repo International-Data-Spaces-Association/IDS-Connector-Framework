@@ -2,7 +2,6 @@ package de.fraunhofer.isst.ids.framework.messaging.handling;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import de.fraunhofer.iais.eis.Connector;
@@ -41,7 +40,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import static de.fraunhofer.isst.ids.framework.messaging.handling.IDSControllerIntegrationTest.TestContextConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -156,7 +154,7 @@ public class IDSControllerIntegrationTest {
         final var result = mockMvc
                 .perform(requestBuilder)
                 .andExpect(status().is(200))
-                .andExpect(content().encoding(StandardCharsets.UTF_8.name()))
+                //.andExpect(content().encoding(StandardCharsets.UTF_8.name())) //will be different if not unix or specified by the embedding system
                 .andReturn();
 
         // Build a request Object with the target and the message header and payload as multipart request
@@ -170,7 +168,7 @@ public class IDSControllerIntegrationTest {
         final var notificationResult = mockMvc
                 .perform(notificationRequestBuilder)
                 .andExpect(status().is(200))
-                .andExpect(content().encoding(StandardCharsets.UTF_8.name()))
+                //.andExpect(content().encoding(StandardCharsets.UTF_8.name())) //will be different if not unix or specified by the embedding system
                 .andReturn();
 
         final var response = result.getResponse();
