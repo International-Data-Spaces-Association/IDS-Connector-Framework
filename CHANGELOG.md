@@ -48,7 +48,7 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 - Upgrade: org.junit.jupiter:junit-jupiter-engine 5.5.2 -> 5.7.2
 - Upgrade: org.mapstruct:mapstruct-processor 1.3.1.Final -> 1.4.2.Final
 - Upgrade: org.springframework.boot:spring-boot-starter 2.4.3 -> 2.5.2
-- Upgrade: org.springframework.boot:spring-boot-starter-test 2.4.3 -> 2.5.1
+- Upgrade: org.springframework.boot:spring-boot-starter-test 2.4.3 -> 2.5.2
 - Upgrade: com.fasterxml.jackson.core:jackson-databind 2.10.1 -> 2.12.3
 - Upgrade: io.springfox:springfox-bean-validators 2.9.2 -> 3.0.0
 - Upgrade: io.springfox:springfox-swagger-ui 2.9.2 -> 3.0.0
