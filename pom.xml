@@ -60,7 +60,7 @@
         <!-- internal dependencies -->
 <!--    <yaim.version>0.1.1-SNAPSHOT</yaim.version>-->
         <de.fraunhofer.iais.eis.ids.infomodel.version>4.0.10</de.fraunhofer.iais.eis.ids.infomodel.version>
-        <de.fraunhofer.iais.eis.ids.infomodel.serializer.version>4.0.10</de.fraunhofer.iais.eis.ids.infomodel.serializer.version>
+        <de.fraunhofer.iais.eis.ids.infomodel.serializer.version>4.1.0</de.fraunhofer.iais.eis.ids.infomodel.serializer.version>
         <de.fraunhofer.iais.eis.ids.infomodel.validator.version>4.0.10</de.fraunhofer.iais.eis.ids.infomodel.validator.version>
 
         <!-- production dependencies -->
