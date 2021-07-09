@@ -42,7 +42,7 @@ Versions before 4.0.0 are available on [GitLab](https://gitlab.cc-asp.fraunhofer
 - Upgrade: org.bitbucket.b_c:jose4j 0.7.0 -> 0.7.8
 - Upgrade: org.bouncycastle:bcpkix-fips 1.0.4 -> 1.0.5
 - Upgrade: org.eclipse.paho:org.eclipse.paho.client.mqttv3 1.2.2 -> 1.2.5
-- Upgrade: org.jooq:jooq 3.12.2 -> 3.14.11
+- Upgrade: org.jooq:jooq 3.12.2 -> 3.15.0
 - Upgrade: org.json:json 20190722 -> 20210307
 - Upgrade: org.junit.jupiter:junit-jupiter-api 5.5.2 -> 5.7.2
 - Upgrade: org.junit.jupiter:junit-jupiter-engine 5.5.2 -> 5.7.2
