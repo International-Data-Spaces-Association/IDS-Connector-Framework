@@ -76,7 +76,7 @@
         <okhttp.version>4.9.1</okhttp.version>
         <mysql-connector.version>8.0.25</mysql-connector.version>
         <h2.version>1.4.200</h2.version>
-        <jooq.version>3.15.0</jooq.version>
+        <jooq.version>3.15.1</jooq.version>
         <javax.ws.rs-api.version>2.1.1</javax.ws.rs-api.version>
         <javax.activation-api.version>1.2.0</javax.activation-api.version>
         <jackson.databind.version>2.12.4</jackson.databind.version>
