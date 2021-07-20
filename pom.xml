@@ -72,7 +72,7 @@
         <jjwt.version>0.9.1</jjwt.version>
         <org-json.version>20210307</org-json.version>
         <lombok.version>1.18.20</lombok.version>
-        <slf4j-api.version>1.7.31</slf4j-api.version>
+        <slf4j-api.version>1.7.32</slf4j-api.version>
         <okhttp.version>4.9.1</okhttp.version>
         <mysql-connector.version>8.0.25</mysql-connector.version>
         <h2.version>1.4.200</h2.version>
